@@ -1,18 +1,21 @@
 package hua.java2.project.cooking;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Recipe {
 
     private String name;
-    private Ingredient[] ingredients;
-    private Cookware[] cookwares;
-    private Step[] steps;
+    private List<Ingredient> ingredients;
+    private List<Cookware> cookwares;
+    private List<Step> steps;
     private int totalTime;
 
     public Recipe(String name, Ingredient[] ingredients, Cookware[] cookwares, Step[] steps, int totalTime) {
         this.name = name;
-        this.ingredients = ingredients;
-        this.cookwares = cookwares;
-        this.steps = steps;
+        this.ingredients = new ArrayList<>();
+        this.cookwares = new ArrayList<>();
+        this.steps = new ArrayList<>();
         this.totalTime = totalTime;
     }
 
@@ -24,29 +27,29 @@ public class Recipe {
         this.name = name;
     }
 
-    public Ingredient[] getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(Ingredient[] ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public Cookware[] getCookwares() {
-        return cookwares;
-    }
-
-    public void setCookwares(Cookware[] cookwares) {
-        this.cookwares = cookwares;
-    }
-
-    public Step[] getSteps() {
-        return steps;
-    }
-
-    public void setSteps(Step[] steps) {
-        this.steps = steps;
-    }
+//    public Ingredient[] getIngredients() {
+//        return ingredients;
+//    }
+//
+//    public void setIngredients(Ingredient[] ingredients) {
+//        this.ingredients = ingredients;
+//    }
+//
+//    public Cookware[] getCookwares() {
+//        return cookwares;
+//    }
+//
+//    public void setCookwares(Cookware[] cookwares) {
+//        this.cookwares = cookwares;
+//    }
+//
+//    public Step[] getSteps() {
+//        return steps;
+//    }
+//
+//    public void setSteps(Step[] steps) {
+//        this.steps = steps;
+//    }
 
     public int getTotalTime() {
         return totalTime;
