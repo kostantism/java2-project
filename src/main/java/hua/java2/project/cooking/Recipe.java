@@ -6,12 +6,14 @@ public class Recipe {
     private Ingredient[] ingredients;
     private Cookware[] cookwares;
     private Step[] steps;
+    private int totalTime;
 
-    public Recipe(String name, Ingredient[] ingredients, Cookware[] cookwares, Step[] steps) {
+    public Recipe(String name, Ingredient[] ingredients, Cookware[] cookwares, Step[] steps, int totalTime) {
         this.name = name;
         this.ingredients = ingredients;
         this.cookwares = cookwares;
         this.steps = steps;
+        this.totalTime = totalTime;
     }
 
     public String getName() {
@@ -44,5 +46,13 @@ public class Recipe {
 
     public void setSteps(Step[] steps) {
         this.steps = steps;
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
     }
 }
