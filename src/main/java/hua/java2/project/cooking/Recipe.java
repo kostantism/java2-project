@@ -3,7 +3,7 @@ package hua.java2.project.cooking;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe {
+public class Recipe implements Info {
 
     private String name;
     private List<Ingredient> ingredients;
@@ -11,7 +11,7 @@ public class Recipe {
     private List<Step> steps;
     private int totalTime;
 
-    public Recipe(String name, Ingredient[] ingredients, Cookware[] cookwares, Step[] steps, int totalTime) {
+    public Recipe(String name, List<Ingredient> ingredients, List<Cookware> cookwares, List<Step> steps, int totalTime) {
         this.name = name;
         this.ingredients = new ArrayList<>();
         this.cookwares = new ArrayList<>();
@@ -33,5 +33,9 @@ public class Recipe {
 
     public void setTotalTime(int totalTime) {
         this.totalTime = totalTime;
+    }
+
+    public void printInfo(){
+
     }
 }
