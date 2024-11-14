@@ -27,30 +27,6 @@ public class Recipe {
         this.name = name;
     }
 
-//    public Ingredient[] getIngredients() {
-//        return ingredients;
-//    }
-//
-//    public void setIngredients(Ingredient[] ingredients) {
-//        this.ingredients = ingredients;
-//    }
-//
-//    public Cookware[] getCookwares() {
-//        return cookwares;
-//    }
-//
-//    public void setCookwares(Cookware[] cookwares) {
-//        this.cookwares = cookwares;
-//    }
-//
-//    public Step[] getSteps() {
-//        return steps;
-//    }
-//
-//    public void setSteps(Step[] steps) {
-//        this.steps = steps;
-//    }
-
     public int getTotalTime() {
         return totalTime;
     }
