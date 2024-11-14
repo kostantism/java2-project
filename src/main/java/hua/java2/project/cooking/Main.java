@@ -23,6 +23,7 @@ public class Main {
 
         } else {
             System.out.println("You should type '-list'.");
+            System.out.println("Doulevei re bro?");
 
         }
 
