@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingList implements Info {
@@ -11,7 +12,7 @@ public class ShoppingList implements Info {
     private List<Ingredient> ingredients;
 
     public ShoppingList(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+        this.ingredients = new ArrayList<>();
     }
 
     public void printInfo(){
@@ -27,8 +28,17 @@ public class ShoppingList implements Info {
 
         try (FileReader reader = new FileReader(file)) {
             int data;
+
             while ((data = reader.read()) != -1) {
-                System.out.print((char) data);
+
+                if((char) data == '@') {
+                    String ingredient = "";
+                    while ((data = reader.read()) != -1 && (char) data != '{') {
+                        ingredient += (char) data;
+                    }
+
+                    ingredients.add(new Ingredient(ingredient, 0, "k"));
+                }
             }
 
         } catch (IOException e) {
@@ -42,6 +52,8 @@ public class ShoppingList implements Info {
         for(i = 1; i < argsLength; i++){
             readRecipe(args[i]);
         }
+
+        printInfo();
     }
 
 }
