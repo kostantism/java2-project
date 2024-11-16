@@ -46,10 +46,10 @@ public class Recipe implements Info {
     public void readRecipe(File f) {
         try (FileReader reader = new FileReader(f)) {
             int data;
-
             while ((data = reader.read()) != -1) {
                 System.out.print((char) data);
             }
+
         } catch (IOException e) {
             System.out.println("error");
         }
