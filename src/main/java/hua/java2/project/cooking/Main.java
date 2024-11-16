@@ -1,9 +1,13 @@
 package hua.java2.project.cooking;
 
+import java.io.File;
 import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
+
+        //test object
+        Recipe r = new Recipe(null, null, null, null, 0);
 
         if(args.length == 0) {
             System.out.println("No arguments provided.");
@@ -12,6 +16,10 @@ public class Main {
             System.out.println("Print recipe.");
 
             //1η λειτουργια
+
+            File file = new File(args[0]);
+            System.out.println(file);
+            r.readRecipe(file);
 
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println("Print shopping list.");

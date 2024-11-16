@@ -1,5 +1,8 @@
 package hua.java2.project.cooking;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +38,20 @@ public class Recipe implements Info {
         this.totalTime = totalTime;
     }
 
-    public void printInfo(){
+    public void printInfo() {
 
+    }
+
+    //reads files
+    public void readRecipe(File f) {
+        try (FileReader reader = new FileReader(f)) {
+            int data;
+
+            while ((data = reader.read()) != -1) {
+                System.out.print((char) data);
+            }
+        } catch (IOException e) {
+            System.out.println("error");
+        }
     }
 }
