@@ -33,7 +33,7 @@ public class ShoppingList implements Info {
 
                 if((char) data == '@') {
                     String ingredient = "";
-                    while ((data = reader.read()) != -1 && (char) data != '{') {
+                    while ((data = reader.read()) != -1 && (char) data != '{' && (char) data != ' ') {
                         ingredient += (char) data;
                     }
 
