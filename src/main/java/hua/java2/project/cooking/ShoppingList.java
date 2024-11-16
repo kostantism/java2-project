@@ -22,8 +22,10 @@ public class ShoppingList implements Info {
     }
 
     //reads files
-    public void readRecipe(File f) {
-        try (FileReader reader = new FileReader(f)) {
+    public void readRecipe(String f) {
+        File file = new File(f);
+
+        try (FileReader reader = new FileReader(file)) {
             int data;
             while ((data = reader.read()) != -1) {
                 System.out.print((char) data);
@@ -35,7 +37,11 @@ public class ShoppingList implements Info {
     }
 
     public void readRecipes(String[] args, int argsLength) {
+        int i;
 
+        for(i = 1; i < argsLength; i++){
+            readRecipe(args[i]);
+        }
     }
 
 }

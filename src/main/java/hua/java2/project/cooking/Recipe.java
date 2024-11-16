@@ -43,8 +43,10 @@ public class Recipe implements Info {
     }
 
     //reads files
-    public void readRecipe(File f) {
-        try (FileReader reader = new FileReader(f)) {
+    public void readRecipe(String f) {
+        File file = new File(f);
+
+        try (FileReader reader = new FileReader(file)) {
             int data;
             while ((data = reader.read()) != -1) {
                 System.out.print((char) data);

@@ -8,6 +8,7 @@ public class Main {
 
         //test object
         Recipe r = new Recipe(null, null, null, null, 0);
+        ShoppingList sl = new ShoppingList(null);
 
         if(args.length == 0) {
             System.out.println("No arguments provided.");
@@ -17,14 +18,15 @@ public class Main {
 
             //1η λειτουργια
 
-            File file = new File(args[0]);
-            System.out.println(file);
-            r.readRecipe(file);
+            System.out.println(args[0]);
+            r.readRecipe(args[0]);
 
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println("Print shopping list.");
 
             //2η λειτουργια
+
+            sl.readRecipes(args, args.length);
 
         } else if(args[0].equals("-list") && args.length == 1) {
             System.out.println("You should provide a recipe.");
