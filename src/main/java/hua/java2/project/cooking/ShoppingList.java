@@ -16,10 +16,16 @@ public class ShoppingList implements Info {
     }
 
     public void printInfo(){
-        System.out.println("Shopping List:");
+        System.out.println("Λίστα αγορών:");
+        System.out.println();
         for(Ingredient i : ingredients){
-            System.out.println("Name: " + i.getName() + " Quantity: " + i.getQuantity() + " " + i.getMeasurmentUnit());
+            if(i.getQuantity().equals("")){
+                System.out.println("Όνομα: " + i.getName());
+            } else {
+                System.out.println("Όνομα: " + i.getName() + " Ποσότητα: " + i.getQuantity() + " " + i.getMeasurmentUnit());
+            }
         }
+        System.out.println();
     }
 
     //reads files
@@ -28,16 +34,113 @@ public class ShoppingList implements Info {
 
         try (FileReader reader = new FileReader(file)) {
             int data;
+            String ingredient = "";
+            String quantity = "";
+            String unitMeasurment = "";
+            boolean readingIngredient = false;
+
+//            String tmpIngredient = "";
 
             while ((data = reader.read()) != -1) {
 
                 if((char) data == '@') {
-                    String ingredient = "";
-                    while ((data = reader.read()) != -1 && (char) data != '{' && (char) data != ' ') {
+                    readingIngredient = true;
+                    ingredient = "";
+                    quantity = "";
+                    unitMeasurment = "";
+
+                } else if (readingIngredient) {
+                    if ((char) data == '{') {
+                        String tmpQuantity = "";
+                        String tmpUnitMeasurment = "";
+                        boolean readingUnitMeasurment = false;
+
+                        while ((data = reader.read()) != -1 && (char) data != '}') {
+                            if ((char) data == '%') {
+                                quantity = tmpQuantity; // Capture quantity
+                                readingUnitMeasurment = true;
+                            } else if (readingUnitMeasurment) {
+                                tmpUnitMeasurment += (char) data;
+                            } else {
+                                tmpQuantity += (char) data;
+                            }
+                        }
+
+                        quantity = tmpQuantity;
+                        unitMeasurment = tmpUnitMeasurment;
+
+                        ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
+                        readingIngredient = false;
+
+                    } else if ((char) data == ' ') {
+
+                        ///////////
+                        boolean br = false;
+                        String tmpIngredient = "";
+
+                        while ((data = reader.read()) != -1 ) {
+                            /////
+                            if ((char) data == '{') {
+                                String tmpQuantity = "";
+                                String tmpUnitMeasurment = "";
+                                boolean readingUnitMeasurment = false;
+
+                                while ((data = reader.read()) != -1 && (char) data != '}') {
+                                    if ((char) data == '%') {
+                                        quantity = tmpQuantity; // Capture quantity
+                                        readingUnitMeasurment = true;
+                                    } else if (readingUnitMeasurment) {
+                                        tmpUnitMeasurment += (char) data;
+                                    } else {
+                                        tmpQuantity += (char) data;
+                                    }
+                                }
+
+                                quantity = tmpQuantity;
+                                unitMeasurment = tmpUnitMeasurment;
+                                //////////
+                                ingredient += tmpIngredient ;
+
+                                ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
+                                readingIngredient = false;
+
+                                ////////
+                                readingIngredient = false;
+//                                br = true;
+                                break;
+
+                            } else if((char) data == '#' || (char) data == '~'){
+                                ingredients.add(new Ingredient(ingredient, "", ""));
+                                readingIngredient = false;
+                                br = true;
+                                break;
+
+                            } else {
+                                if((char) data == ' ') {
+                                    tmpIngredient += ' ';
+                                } else {
+                                    tmpIngredient += (char) data;
+                                }
+
+//                                ingredient +=(char) data;
+                            }
+                        }
+
+                        if(br) {
+                            break;
+                        } else {
+                            ingredient += tmpIngredient;
+
+//      αλατιθαλασσινο                      ingredients.add(new Ingredient(ingredient, "", ""));
+                            readingIngredient = false;
+                        }
+
+//         palio               ingredients.add(new Ingredient(ingredient, "", ""));
+//                        readingIngredient = false;
+
+                    } else {
                         ingredient += (char) data;
                     }
-
-                    ingredients.add(new Ingredient(ingredient, 0, "k"));
                 }
             }
 

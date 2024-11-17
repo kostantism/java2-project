@@ -3,10 +3,10 @@ package hua.java2.project.cooking;
 public class Ingredient {
 
     private String name;
-    private int quantity;
+    private String quantity;
     private String measurmentUnit;
 
-    public Ingredient(String name, int quantity, String measurmentUnit) {
+    public Ingredient(String name, String quantity, String measurmentUnit) {
         this.name = name;
         this.quantity = quantity;
         this.measurmentUnit = measurmentUnit;
@@ -20,11 +20,11 @@ public class Ingredient {
         this.name = name;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 

@@ -22,7 +22,7 @@ public class Main {
             r.readRecipe(args[0]);
 
         } else if(args[0].equals("-list") && args.length > 1) {
-            System.out.println("Print shopping list.");
+            System.out.println();
 
             //2η λειτουργια
 
