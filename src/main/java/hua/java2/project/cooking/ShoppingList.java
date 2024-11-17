@@ -57,7 +57,6 @@ public class ShoppingList implements Info {
 
                         while ((data = reader.read()) != -1 && (char) data != '}') {
                             if ((char) data == '%') {
-                                quantity = tmpQuantity; // Capture quantity
                                 readingUnitMeasurment = true;
                             } else if (readingUnitMeasurment) {
                                 tmpUnitMeasurment += (char) data;
@@ -74,12 +73,10 @@ public class ShoppingList implements Info {
 
                     } else if ((char) data == ' ') {
 
-                        ///////////
                         boolean br = false;
                         String tmpIngredient = "";
 
                         while ((data = reader.read()) != -1 ) {
-                            /////
                             if ((char) data == '{') {
                                 String tmpQuantity = "";
                                 String tmpUnitMeasurment = "";
@@ -87,7 +84,6 @@ public class ShoppingList implements Info {
 
                                 while ((data = reader.read()) != -1 && (char) data != '}') {
                                     if ((char) data == '%') {
-                                        quantity = tmpQuantity; // Capture quantity
                                         readingUnitMeasurment = true;
                                     } else if (readingUnitMeasurment) {
                                         tmpUnitMeasurment += (char) data;
@@ -98,31 +94,19 @@ public class ShoppingList implements Info {
 
                                 quantity = tmpQuantity;
                                 unitMeasurment = tmpUnitMeasurment;
-                                //////////
-                                ingredient += tmpIngredient ;
+                                ingredient += ' ' + tmpIngredient;
 
                                 ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
-                                readingIngredient = false;
-
-                                ////////
-                                readingIngredient = false;
-//                                br = true;
                                 break;
 
                             } else if((char) data == '#' || (char) data == '~'){
                                 ingredients.add(new Ingredient(ingredient, "", ""));
-                                readingIngredient = false;
                                 br = true;
                                 break;
 
                             } else {
-                                if((char) data == ' ') {
-                                    tmpIngredient += ' ';
-                                } else {
-                                    tmpIngredient += (char) data;
-                                }
+                                tmpIngredient += (char) data;
 
-//                                ingredient +=(char) data;
                             }
                         }
 
@@ -131,12 +115,8 @@ public class ShoppingList implements Info {
                         } else {
                             ingredient += tmpIngredient;
 
-//      αλατιθαλασσινο                      ingredients.add(new Ingredient(ingredient, "", ""));
                             readingIngredient = false;
                         }
-
-//         palio               ingredients.add(new Ingredient(ingredient, "", ""));
-//                        readingIngredient = false;
 
                     } else {
                         ingredient += (char) data;
