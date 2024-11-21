@@ -38,9 +38,7 @@ public class ShoppingList implements Info {
             String quantity = "";
             String unitMeasurment = "";
             boolean readingIngredient = false;
-
-//            String tmpIngredient = "";
-
+            
             while ((data = reader.read()) != -1) {
 
                 if((char) data == '@') {
