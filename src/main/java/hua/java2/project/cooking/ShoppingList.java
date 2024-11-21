@@ -19,7 +19,7 @@ public class ShoppingList implements Info {
         System.out.println("Λίστα αγορών:");
         System.out.println();
         for(Ingredient i : ingredients){
-            if(i.getQuantity().equals("")){
+            if(i.getQuantity() == 0){/////////////////////////
                 System.out.println("Όνομα: " + i.getName());
             } else {
                 System.out.println("Όνομα: " + i.getName() + " Ποσότητα: " + i.getQuantity() + " " + i.getMeasurmentUnit());
@@ -35,7 +35,7 @@ public class ShoppingList implements Info {
         try (FileReader reader = new FileReader(file)) {
             int data;
             String ingredient = "";
-            String quantity = "";
+            int quantity = 0;//////////////////////
             String unitMeasurment = "";
             boolean readingIngredient = false;
             
@@ -44,12 +44,12 @@ public class ShoppingList implements Info {
                 if((char) data == '@') {
                     readingIngredient = true;
                     ingredient = "";
-                    quantity = "";
+                    quantity = 0; ////////////////////////
                     unitMeasurment = "";
 
                 } else if (readingIngredient) {
                     if ((char) data == '{') {
-                        String tmpQuantity = "";
+                        int tmpQuantity = 0;//////////////////////
                         String tmpUnitMeasurment = "";
                         boolean readingUnitMeasurment = false;
 
@@ -59,14 +59,28 @@ public class ShoppingList implements Info {
                             } else if (readingUnitMeasurment) {
                                 tmpUnitMeasurment += (char) data;
                             } else {
-                                tmpQuantity += (char) data;
+                                tmpQuantity += (char) data;//////////
                             }
                         }
 
-                        quantity = tmpQuantity;
+                        quantity = tmpQuantity;////////
                         unitMeasurment = tmpUnitMeasurment;
 
-                        ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
+                        boolean found = false;
+
+                        ///////////////////
+                        for(Ingredient i : ingredients){
+                            if(i.getName().equals(ingredient)){
+                                i.setQuantity(i.getQuantity() + quantity);
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if(!found) {
+                            ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
+                        }
+
                         readingIngredient = false;
 
                     } else if ((char) data == ' ') {
@@ -76,7 +90,7 @@ public class ShoppingList implements Info {
 
                         while ((data = reader.read()) != -1 ) {
                             if ((char) data == '{') {
-                                String tmpQuantity = "";
+                                int tmpQuantity = 0; //////////////
                                 String tmpUnitMeasurment = "";
                                 boolean readingUnitMeasurment = false;
 
@@ -86,19 +100,47 @@ public class ShoppingList implements Info {
                                     } else if (readingUnitMeasurment) {
                                         tmpUnitMeasurment += (char) data;
                                     } else {
-                                        tmpQuantity += (char) data;
+                                        tmpQuantity += (char) data;/////////////
                                     }
                                 }
 
-                                quantity = tmpQuantity;
+                                quantity = tmpQuantity;//////////
                                 unitMeasurment = tmpUnitMeasurment;
                                 ingredient += ' ' + tmpIngredient;
 
-                                ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
+                                boolean found = false;
+
+                                ///////////////////
+                                for(Ingredient i : ingredients){
+                                    if(i.getName().equals(ingredient)){
+                                        i.setQuantity(i.getQuantity() + quantity);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!found) {
+                                    ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
+                                }
+
                                 break;
 
                             } else if((char) data == '#' || (char) data == '~'){
-                                ingredients.add(new Ingredient(ingredient, "", ""));
+                                boolean found = false;
+
+                                ///////////////////
+                                for(Ingredient i : ingredients){
+                                    if(i.getName().equals(ingredient)){
+                                        i.setQuantity(i.getQuantity() + 1);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!found) {
+                                    ingredients.add(new Ingredient(ingredient, 1, ""));////////////////
+                                }
+
                                 br = true;
                                 break;
 
