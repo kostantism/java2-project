@@ -2,20 +2,20 @@ package hua.java2.project.cooking;
 
 public class Step {
 
-    private String step;
+    private String description;
     private int stepTime;
 
-    public Step(String step, int stepTime) {
-        this.step = step;
+    public Step(String description, int stepTime) {
+        this.description = description;
         this.stepTime = stepTime;
     }
 
     public String getStep() {
-        return step;
+        return description;
     }
 
     public void setStep(String step) {
-        this.step = step;
+        this.description = description;
     }
 
     public int getStepTime() {

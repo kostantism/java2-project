@@ -26,7 +26,7 @@ public class Main {
 
             //2η λειτουργια
 
-            sl.readRecipes(args, args.length);
+            sl.printShoppingList(args, args.length);
 
         } else if(args[0].equals("-list") && args.length == 1) {
             System.out.println("You should provide a recipe.");

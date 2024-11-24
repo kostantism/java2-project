@@ -49,36 +49,6 @@ public class ShoppingList implements Info {
 
                 } else if (readingIngredient) {///////////////////////
                     if ((char) data == '{') {
-//                        String tmpQuantity = "";
-//                        String tmpUnitMeasurment = "";
-//                        boolean readingUnitMeasurment = false;
-//
-//                        while ((data = reader.read()) != -1 && (char) data != '}') {
-//                            if ((char) data == '%') {
-//                                readingUnitMeasurment = true;
-//                            } else if (readingUnitMeasurment) {
-//                                tmpUnitMeasurment += (char) data;
-//                            } else {
-//                                tmpQuantity += (char) data;
-//                            }
-//                        }
-//
-//                        quantity = Integer.parseInt(tmpQuantity);
-//                        unitMeasurment = tmpUnitMeasurment;
-//
-//                        boolean found = false;
-//
-//                        for(Ingredient i : ingredients){
-//                            if(i.getName().equals(ingredient)){
-//                                i.setQuantity(i.getQuantity() + quantity);
-//                                found = true;
-//                                break;
-//                            }
-//                        }
-//
-//                        if(!found) {
-//                            ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
-//                        }
 
                         addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
 
@@ -91,37 +61,8 @@ public class ShoppingList implements Info {
 
                         while ((data = reader.read()) != -1 ) {
                             if ((char) data == '{') {
-                                String tmpQuantity = "";
-                                String tmpUnitMeasurment = "";
-                                boolean readingUnitMeasurment = false;
 
-                                while ((data = reader.read()) != -1 && (char) data != '}') {
-                                    if ((char) data == '%') {
-                                        readingUnitMeasurment = true;
-                                    } else if (readingUnitMeasurment) {
-                                        tmpUnitMeasurment += (char) data;
-                                    } else {
-                                        tmpQuantity += (char) data;
-                                    }
-                                }
-
-                                quantity = Integer.parseInt(tmpQuantity);
-                                unitMeasurment = tmpUnitMeasurment;
-                                ingredient += ' ' + tmpIngredient;
-
-                                boolean found = false;
-
-                                for(Ingredient i : ingredients){
-                                    if(i.getName().equals(ingredient)){
-                                        i.setQuantity(i.getQuantity() + quantity);
-                                        found = true;
-                                        break;
-                                    }
-                                }
-
-                                if(!found) {
-                                    ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
-                                }
+                                addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
 
                                 break;
 
@@ -207,6 +148,10 @@ public class ShoppingList implements Info {
         for(i = 1; i < argsLength; i++){
             readRecipe(args[i]);
         }
+    }
+
+    public void printShoppingList(String[] args, int argsLength) {
+        readRecipes(args, args.length);
 
         printInfo();
     }
