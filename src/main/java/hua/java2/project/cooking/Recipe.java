@@ -220,8 +220,7 @@ public class Recipe implements Info {
         int counter = 1;
         for (Step stps : steps){
             System.out.println(counter + ". " + stps.getStep());
-            int counter1 = counter;
-            counter1++;
+            counter++;
         }
     }
     private void addIngredient(FileReader reader, int data, String ingredient, int quantity, String unitMeasurment) throws IOException {
