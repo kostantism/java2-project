@@ -2,5 +2,5 @@ package hua.java2.project.cooking;
 
 public interface UnitConvertion {
 
-    float utinConvertion();
+    float convert(int q, String name);
 }

@@ -1,6 +1,6 @@
 package hua.java2.project.cooking;
 
-public class MeasurementUnit {
+public class MeasurementUnit implements UnitConvertion{
 
     private String name;
 
@@ -14,5 +14,12 @@ public class MeasurementUnit {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public float convert(int q, String name) {
+        
+
+        return 0;
     }
 }

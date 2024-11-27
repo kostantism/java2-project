@@ -39,7 +39,6 @@ public class Recipe implements Info {
         this.totalTime = totalTime;
     }
 
-
     //reads files
     public void readRecipe(String f) {
         File file = new File(f);
@@ -56,16 +55,17 @@ public class Recipe implements Info {
             boolean readingCookware = false;
             boolean newlinefound = false;
 
-
             while ((data = reader.read()) != -1) {
+
                 singlestep += (char) data;
+
                 if ((char) data == '@') {
                     readingIngredient = true;
                     ingredient = "";
                     quantity = 0;
                     unitMeasurment = "";
 
-                } else if (readingIngredient) {///////////////////////
+                } else if (readingIngredient) {
                     if ((char) data == '{') {
 
                         addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
@@ -120,24 +120,30 @@ public class Recipe implements Info {
                         ingredient += (char) data;
                     }
                 }
+
                 if ((char) data == '#'){
                     readingCookware = true;
                     cookware = "";
 
                 } else if (readingCookware) {
                     if ((char) data == '{') {
+
                         boolean ckwrfound = false;
+
                         for (Cookware c : cookwares){
                             if(c.getName().equals(cookware)){
                                 ckwrfound = true;
                                 break;
                             }
                         }
+
                         if (!ckwrfound){
                             cookwares.add(new Cookware(cookware));
                         }
                     }
+
                     readingCookware = false;
+
                 } else if ((char) data == ' ') {
                     boolean br = false;
                     String tmpcookware="";
@@ -145,35 +151,43 @@ public class Recipe implements Info {
                     while ((data = reader.read()) != -1) {
                         if ((char) data == '{') {
                             boolean ckwrfound = false;
+
                             for (Cookware c : cookwares){
                                 if(c.getName().equals(cookware)){
                                     ckwrfound = true;
                                     break;
                                 }
                             }
+
                             if (!ckwrfound){
                                 cookwares.add(new Cookware(cookware));
                             }
+
                             break;
-                        }else if ((char) data == '@' || (char) data == '~') {
+
+                        } else if ((char) data == '@' || (char) data == '~') {
                             boolean found = false;
+
                             for (Cookware cookware1: cookwares){
                                 if (cookware1.getName().equals(cookware)){
                                     found = true;
                                     break;
                                 }
                             }
+
                             if (!found) {
                                 cookwares.add(new Cookware(cookware));
                             }
 
                             br = true;
                             break;
+
                         } else {
-                        tmpcookware += (char) data;
+                            tmpcookware += (char) data;
 
                         }
                     }
+
                     if (br) {
                         break;
                     } else {
@@ -181,17 +195,20 @@ public class Recipe implements Info {
 
                         readingCookware = false;
                     }
-                }else {
+
+                } else {
                     cookware += (char) data;
                 }
+
                 if (newlinefound){
                     if ((char) data == '\n' ||  ((char) data == '\r')){
-                        steps.add(new Step(singlestep,timeofastep));
+                        steps.add(new Step(singlestep, timeofastep));
                         newlinefound = false;
                         singlestep = "";
                     }
                 }
-                if ((char) data == '\n' ||  ((char) data == '\r')){
+
+                if ((char) data == '\n' ||  ((char) data == '\r')) {
                     newlinefound = true;
                 }
                 //gia xrono vhmatos
@@ -201,8 +218,10 @@ public class Recipe implements Info {
             System.out.println("error");
         }
     }
+
     public void printInfo(){
         System.out.println("Yλικά: ");
+
         for(Ingredient ingr : ingredients){
             if(ingr.getQuantity() == 0){
                 System.out.println("Όνομα: " + ingr.getName());
@@ -210,19 +229,26 @@ public class Recipe implements Info {
                 System.out.println("Όνομα: " + ingr.getName() + " Ποσότητα: " + ingr.getQuantity() + " " + ingr.getMeasurmentUnit());
             }
         }
+
         System.out.println("Σκεύοι: ");
+
         for(Cookware ckwrs : cookwares){
             System.out.println(ckwrs.getName());
         }
+
         System.out.println("Συνολικός Χρόνος: ");
         //xronos
+
         System.out.println("Αναλυτικά τα βήματα: ");
+
         int counter = 1;
+
         for (Step stps : steps){
             System.out.println(counter + ". " + stps.getStep());
             counter++;
         }
     }
+
     private void addIngredient(FileReader reader, int data, String ingredient, int quantity, String unitMeasurment) throws IOException {
         String tmpQuantity = "";
         String tmpUnitMeasurment = "";
@@ -255,6 +281,10 @@ public class Recipe implements Info {
             ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
         }
     }
-    public void printFirstpart(String args[]) {
+
+    public void printRecipeInfo(String f) {
+        readRecipe(f);
+
+        printInfo();
     }
 }

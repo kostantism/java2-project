@@ -19,11 +19,7 @@ public class ShoppingList implements Info {
         System.out.println("Λίστα αγορών:");
         System.out.println();
         for(Ingredient i : ingredients){
-            if(i.getQuantity() == 0){
-                System.out.println("Όνομα: " + i.getName());
-            } else {
-                System.out.println("Όνομα: " + i.getName() + " Ποσότητα: " + i.getQuantity() + " " + i.getMeasurmentUnit());
-            }
+            System.out.println("Όνομα: " + i.getName() + " Ποσότητα: " + i.getQuantity() + " " + i.getMeasurmentUnit());
         }
         System.out.println();
     }

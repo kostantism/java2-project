@@ -14,12 +14,11 @@ public class Main {
             System.out.println("No arguments provided.");
 
         } else if(args.length == 1 && !args[0].equals("-list")) {
-            System.out.println("Print recipe.");
+            System.out.println();
 
             //1η λειτουργια
 
-            System.out.println(args[0]);
-
+            r.printRecipeInfo(args[0]);
 
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println();
