@@ -6,4 +6,5 @@ public interface Info {
     void printInfo();
 
     void readRecipe(String f);
+
 }

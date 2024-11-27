@@ -19,7 +19,7 @@ public class Main {
             //1η λειτουργια
 
             System.out.println(args[0]);
-            r.readRecipe(args[0]);
+
 
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println();
