@@ -57,8 +57,6 @@ public class Recipe implements Info {
 
             while ((data = reader.read()) != -1) {
 
-                singlestep += (char) data;
-
                 if ((char) data == '@') {
                     readingIngredient = true;
                     ingredient = "";
@@ -120,8 +118,11 @@ public class Recipe implements Info {
                         ingredient += (char) data;
                     }
                 }
+            }
+            while ((data = reader.read()) != -1) {
+                singlestep += (char) data;
 
-                if ((char) data == '#'){
+                if ((char) data == '#') {
                     readingCookware = true;
                     cookware = "";
 
@@ -130,36 +131,36 @@ public class Recipe implements Info {
 
                         boolean ckwrfound = false;
 
-                        for (Cookware c : cookwares){
-                            if(c.getName().equals(cookware)){
+                        for (Cookware c : cookwares) {
+                            if (c.getName().equals(cookware)) {
                                 ckwrfound = true;
                                 break;
                             }
                         }
 
-                        if (!ckwrfound){
+                        if (!ckwrfound) {
                             cookwares.add(new Cookware(cookware));
                         }
-                    }
 
-                    readingCookware = false;
+                        readingCookware = false;
 
-                } else if ((char) data == ' ') {
-                    boolean br = false;
-                    String tmpcookware="";
+                    } else if ((char) data == ' ') {
+                        boolean br = false;
+                        String tmpcookware = "";
 
-                    while ((data = reader.read()) != -1) {
+                        while ((data = reader.read()) != -1) {
+                        }
                         if ((char) data == '{') {
                             boolean ckwrfound = false;
 
-                            for (Cookware c : cookwares){
-                                if(c.getName().equals(cookware)){
+                            for (Cookware c : cookwares) {
+                                if (c.getName().equals(cookware)) {
                                     ckwrfound = true;
                                     break;
                                 }
                             }
 
-                            if (!ckwrfound){
+                            if (!ckwrfound) {
                                 cookwares.add(new Cookware(cookware));
                             }
 
@@ -168,8 +169,8 @@ public class Recipe implements Info {
                         } else if ((char) data == '@' || (char) data == '~') {
                             boolean found = false;
 
-                            for (Cookware cookware1: cookwares){
-                                if (cookware1.getName().equals(cookware)){
+                            for (Cookware cookware1 : cookwares) {
+                                if (cookware1.getName().equals(cookware)) {
                                     found = true;
                                     break;
                                 }
@@ -186,38 +187,57 @@ public class Recipe implements Info {
                             tmpcookware += (char) data;
 
                         }
-                    }
+                        if (br) {
+                            break;
+                        } else {
+                            cookware += tmpcookware;
 
-                    if (br) {
-                        break;
+                            readingCookware = false;
+                        }
+
                     } else {
-                        cookware += tmpcookware;
-
-                        readingCookware = false;
+                        cookware += (char) data;
                     }
-
-                } else {
-                    cookware += (char) data;
                 }
-
-                if (newlinefound){
-                    if ((char) data == '\n' ||  ((char) data == '\r')){
+            }
+            while ((data = reader.read()) != -1) {
+                if (newlinefound) {
+                    if ((char) data == '\n' || ((char) data == '\r')) {
                         steps.add(new Step(singlestep, timeofastep));
                         newlinefound = false;
                         singlestep = "";
                     }
                 }
 
-                if ((char) data == '\n' ||  ((char) data == '\r')) {
+                if ((char) data == '\n' || ((char) data == '\r')) {
                     newlinefound = true;
                 }
-                //gia xrono vhmatos
             }
+        }catch (IOException e) {
+            System.out.println("error");
+        }
+    }
+
+
+// ΓΙΑ ΤΑ ΣΤΕΠΣ
+           /* if (newlinefound) {
+                if ((char) data == '\n' || ((char) data == '\r')) {
+                    steps.add(new Step(singlestep, timeofastep));
+                    newlinefound = false;
+                    singlestep = "";
+                }
+            }
+
+            if ((char) data == '\n' || ((char) data == '\r')) {
+                newlinefound = true;
+            }
+            //gia xrono vhmatos
+
 
         } catch (IOException e) {
             System.out.println("error");
         }
-    }
+    }*/
 
     public void printInfo(){
         System.out.println("Yλικά: ");
