@@ -221,6 +221,7 @@ public class Recipe implements Info {
 
     public void printInfo(){
         System.out.println("Yλικά: ");
+        System.out.println();
 
         for(Ingredient ingr : ingredients){
             if(ingr.getQuantity() == 0){
@@ -229,17 +230,24 @@ public class Recipe implements Info {
                 System.out.println("Όνομα: " + ingr.getName() + " Ποσότητα: " + ingr.getQuantity() + " " + ingr.getMeasurmentUnit());
             }
         }
+        System.out.println();
 
         System.out.println("Σκεύοι: ");
+        System.out.println();
 
         for(Cookware ckwrs : cookwares){
             System.out.println(ckwrs.getName());
         }
+        System.out.println();
 
         System.out.println("Συνολικός Χρόνος: ");
+        System.out.println();
         //xronos
 
+        System.out.println();
+
         System.out.println("Αναλυτικά τα βήματα: ");
+        System.out.println();
 
         int counter = 1;
 
