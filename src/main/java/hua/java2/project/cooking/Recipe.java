@@ -45,25 +45,20 @@ public class Recipe implements Info {
 
         try (FileReader reader = new FileReader(file)) {
             int data;
-            int timeofastep = 0;
             String ingredient = "";
-            String cookware = "";
-            String singlestep = "";
             int quantity = 0;
             String unitMeasurment = "";
             boolean readingIngredient = false;
-            boolean readingCookware = false;
-            boolean newlinefound = false;
 
             while ((data = reader.read()) != -1) {
 
-                if ((char) data == '@') {
+                if((char) data == '@') {
                     readingIngredient = true;
                     ingredient = "";
                     quantity = 0;
                     unitMeasurment = "";
 
-                } else if (readingIngredient) {
+                } else if (readingIngredient) {///////////////////////
                     if ((char) data == '{') {
 
                         addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
@@ -75,25 +70,25 @@ public class Recipe implements Info {
                         boolean br = false;
                         String tmpIngredient = "";
 
-                        while ((data = reader.read()) != -1) {
+                        while ((data = reader.read()) != -1 ) {
                             if ((char) data == '{') {
 
                                 addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
 
                                 break;
 
-                            } else if ((char) data == '#' || (char) data == '~') {
+                            } else if((char) data == '#' || (char) data == '~'){
                                 boolean found = false;
 
-                                for (Ingredient i : ingredients) {
-                                    if (i.getName().equals(ingredient)) {
+                                for(Ingredient i : ingredients){
+                                    if(i.getName().equals(ingredient)){
                                         i.setQuantity(i.getQuantity() + 1);
                                         found = true;
                                         break;
                                     }
                                 }
 
-                                if (!found) {
+                                if(!found) {
                                     ingredients.add(new Ingredient(ingredient, 1, ""));
                                 }
 
@@ -106,7 +101,7 @@ public class Recipe implements Info {
                             }
                         }
 
-                        if (br) {
+                        if(br) {
                             break;
                         } else {
                             ingredient += tmpIngredient;
@@ -119,7 +114,41 @@ public class Recipe implements Info {
                     }
                 }
             }
+
+        } catch (IOException e) {
+            System.out.println("error");
+        }
+
+        try (FileReader reader = new FileReader(file)) {
+            int data;
+            boolean readingnewline = false;
+            String singlestep ="";
             while ((data = reader.read()) != -1) {
+                singlestep += (char) data;
+                char currentChar = (char) data;
+                if (readingnewline) {
+                    if (currentChar == '\n' || currentChar == '\r') {
+                        steps.add(new Step(singlestep,0));
+                        readingnewline = false;
+                    } else {
+                        readingnewline = false;
+                    }
+                }
+                if (currentChar == '\n' || currentChar == '\r') {
+                    readingnewline = true;
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("error");
+        }
+
+
+    }
+
+
+// ΓΙΑ ΤΑ ΣΤΕΠΣ
+           /*while ((data = reader.read()) != -1) {
                 singlestep += (char) data;
 
                 if ((char) data == '#') {
@@ -213,26 +242,6 @@ public class Recipe implements Info {
                     newlinefound = true;
                 }
             }
-        }catch (IOException e) {
-            System.out.println("error");
-        }
-    }
-
-
-// ΓΙΑ ΤΑ ΣΤΕΠΣ
-           /* if (newlinefound) {
-                if ((char) data == '\n' || ((char) data == '\r')) {
-                    steps.add(new Step(singlestep, timeofastep));
-                    newlinefound = false;
-                    singlestep = "";
-                }
-            }
-
-            if ((char) data == '\n' || ((char) data == '\r')) {
-                newlinefound = true;
-            }
-            //gia xrono vhmatos
-
 
         } catch (IOException e) {
             System.out.println("error");
