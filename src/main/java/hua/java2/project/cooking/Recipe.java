@@ -39,8 +39,6 @@ public class Recipe implements Info {
         this.totalTime = totalTime;
     }
 
-    //instances
-    Recipe q = new Recipe(null, null, null, null, 0);
 
     //reads files
     public void readRecipe(String f) {
