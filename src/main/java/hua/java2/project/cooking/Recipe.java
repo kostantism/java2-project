@@ -39,8 +39,56 @@ public class Recipe implements Info {
         this.totalTime = totalTime;
     }
 
+    //instances
+    Recipe q = new Recipe(null, null, null, null, 0);
+
     //reads files
     public void readRecipe(String f) {
+
+    }
+
+
+
+
+    public void printInfo(){
+        System.out.println("Yλικά: ");
+        System.out.println();
+
+        for(Ingredient ingr : ingredients){
+            if(ingr.getQuantity() == 0){
+                System.out.println("Όνομα: " + ingr.getName());
+            } else {
+                System.out.println("Όνομα: " + ingr.getName() + " Ποσότητα: " + ingr.getQuantity() + " " + ingr.getMeasurmentUnit());
+            }
+        }
+        System.out.println();
+
+        System.out.println("Σκεύοι: ");
+        System.out.println();
+
+        for(Cookware ckwrs : cookwares){
+            System.out.println(ckwrs.getName());
+        }
+        System.out.println();
+
+        System.out.println("Συνολικός Χρόνος: ");
+        System.out.println();
+        //xronos
+
+        System.out.println();
+
+        System.out.println("Αναλυτικά τα βήματα: ");
+        System.out.println();
+
+        int counter = 1;
+
+        for (Step stps : steps){
+            System.out.println(counter + ". " + stps.getStep());
+            counter++;
+        }
+    }
+
+    public void readIngredient(String f){
         File file = new File(f);
 
         try (FileReader reader = new FileReader(file)) {
@@ -118,7 +166,14 @@ public class Recipe implements Info {
         } catch (IOException e) {
             System.out.println("error");
         }
+    }
 
+    public void readCookware(String f){
+        // sunarthsh gia cookware
+    }
+
+    public void readStep(String f){
+        File file = new File(f);
         try (FileReader reader = new FileReader(file)) {
             int data;
             boolean readingnewline = false;
@@ -128,24 +183,60 @@ public class Recipe implements Info {
                 char currentChar = (char) data;
                 if (readingnewline) {
                     if (currentChar == '\n' || currentChar == '\r') {
-                        steps.add(new Step(singlestep,0));
+                        steps.add(new Step(singlestep, 0));
                         readingnewline = false;
                     } else {
                         readingnewline = false;
                     }
-                }
-                if (currentChar == '\n' || currentChar == '\r') {
+                } else if (currentChar == '\n' || currentChar == '\r') {
                     readingnewline = true;
                 }
-            }
 
+            }
         } catch (IOException e) {
             System.out.println("error");
         }
-
-
     }
 
+    private void addIngredient(FileReader reader, int data, String ingredient, int quantity, String unitMeasurment) throws IOException {
+        String tmpQuantity = "";
+        String tmpUnitMeasurment = "";
+        boolean readingUnitMeasurment = false;
+
+        while ((data = reader.read()) != -1 && (char) data != '}') {
+            if ((char) data == '%') {
+                readingUnitMeasurment = true;
+            } else if (readingUnitMeasurment) {
+                tmpUnitMeasurment += (char) data;
+            } else {
+                tmpQuantity += (char) data;
+            }
+        }
+
+        quantity = Integer.parseInt(tmpQuantity);
+        unitMeasurment = tmpUnitMeasurment;
+
+        boolean found = false;
+
+        for(Ingredient i : ingredients){
+            if(i.getName().equals(ingredient)){
+                i.setQuantity(i.getQuantity() + quantity);
+                found = true;
+                break;
+            }
+        }
+
+        if(!found) {
+            ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
+        }
+    }
+
+    public void printRecipeInfo(String f) {
+        readRecipe(f);
+
+        printInfo();
+    }
+}
 
 // ΓΙΑ ΤΑ ΣΤΕΠΣ
            /*while ((data = reader.read()) != -1) {
@@ -247,81 +338,3 @@ public class Recipe implements Info {
             System.out.println("error");
         }
     }*/
-
-    public void printInfo(){
-        System.out.println("Yλικά: ");
-        System.out.println();
-
-        for(Ingredient ingr : ingredients){
-            if(ingr.getQuantity() == 0){
-                System.out.println("Όνομα: " + ingr.getName());
-            } else {
-                System.out.println("Όνομα: " + ingr.getName() + " Ποσότητα: " + ingr.getQuantity() + " " + ingr.getMeasurmentUnit());
-            }
-        }
-        System.out.println();
-
-        System.out.println("Σκεύοι: ");
-        System.out.println();
-
-        for(Cookware ckwrs : cookwares){
-            System.out.println(ckwrs.getName());
-        }
-        System.out.println();
-
-        System.out.println("Συνολικός Χρόνος: ");
-        System.out.println();
-        //xronos
-
-        System.out.println();
-
-        System.out.println("Αναλυτικά τα βήματα: ");
-        System.out.println();
-
-        int counter = 1;
-
-        for (Step stps : steps){
-            System.out.println(counter + ". " + stps.getStep());
-            counter++;
-        }
-    }
-
-    private void addIngredient(FileReader reader, int data, String ingredient, int quantity, String unitMeasurment) throws IOException {
-        String tmpQuantity = "";
-        String tmpUnitMeasurment = "";
-        boolean readingUnitMeasurment = false;
-
-        while ((data = reader.read()) != -1 && (char) data != '}') {
-            if ((char) data == '%') {
-                readingUnitMeasurment = true;
-            } else if (readingUnitMeasurment) {
-                tmpUnitMeasurment += (char) data;
-            } else {
-                tmpQuantity += (char) data;
-            }
-        }
-
-        quantity = Integer.parseInt(tmpQuantity);
-        unitMeasurment = tmpUnitMeasurment;
-
-        boolean found = false;
-
-        for(Ingredient i : ingredients){
-            if(i.getName().equals(ingredient)){
-                i.setQuantity(i.getQuantity() + quantity);
-                found = true;
-                break;
-            }
-        }
-
-        if(!found) {
-            ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
-        }
-    }
-
-    public void printRecipeInfo(String f) {
-        readRecipe(f);
-
-        printInfo();
-    }
-}
