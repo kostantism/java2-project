@@ -46,6 +46,7 @@ public class Recipe implements Info {
         readStep(f);
     }
 
+
     public void printInfo(){
         System.out.println("Yλικά: ");
         System.out.println();
@@ -82,7 +83,6 @@ public class Recipe implements Info {
             System.out.println(counter + ". " + stps.getStep());
             counter++;
         }
-        System.out.println();
     }
 
     public void readIngredient(String f){
@@ -103,7 +103,7 @@ public class Recipe implements Info {
                     quantity = 0;
                     unitMeasurment = "";
 
-                } else if (readingIngredient) {
+                } else if (readingIngredient) {///////////////////////
                     if ((char) data == '{') {
 
                         addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
@@ -166,36 +166,35 @@ public class Recipe implements Info {
     }
 
     public void readCookware(String f){
-        // sunarthsh gia cookware
+        File file = new File(f);
+        try (FileReader reader = new FileReader(file)) {
+            int data;
+        } catch (IOException e){
+            System.out.println("error");
+        }
     }
 
     public void readStep(String f){
         File file = new File(f);
         try (FileReader reader = new FileReader(file)) {
             int data;
-            String singleStep ="";
-            boolean isNewline = false;
-
+            boolean readingnewline = false;
+            String singlestep ="";
             while ((data = reader.read()) != -1) {
+                singlestep += (char) data;
                 char currentChar = (char) data;
-
-                if ((currentChar == '\n' || currentChar == '\r') && (reader.read() == '\n' || reader.read() == '\r')) {
-                    if (isNewline) {
-                        steps.add(new Step(singleStep, 0));
-                        singleStep = "";
+                if (readingnewline) {
+                    if (currentChar == '\n' || currentChar == '\r') {
+                        steps.add(new Step(singlestep, 0));
+                        readingnewline = false;
+                    } else {
+                        readingnewline = false;
                     }
-                    isNewline = true;
-                } else {
-                    singleStep += currentChar;
-                    isNewline = false;
+                } else if (currentChar == '\n' || currentChar == '\r') {
+                    readingnewline = true;
                 }
 
             }
-
-            if (!singleStep.equals("")) {
-                steps.add(new Step(singleStep, 0));
-            }
-
         } catch (IOException e) {
             System.out.println("error");
         }
