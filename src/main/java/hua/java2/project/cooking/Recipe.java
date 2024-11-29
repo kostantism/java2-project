@@ -81,6 +81,7 @@ public class Recipe implements Info {
 
         for (Step stps : steps){
             System.out.println(counter + ". " + stps.getStep());
+            System.out.println();
             counter++;
         }
     }
@@ -178,23 +179,27 @@ public class Recipe implements Info {
         File file = new File(f);
         try (FileReader reader = new FileReader(file)) {
             int data;
-            boolean readingnewline = false;
+            boolean isNewline = false;
             String singlestep ="";
-            while ((data = reader.read()) != -1) {
-                singlestep += (char) data;
-                char currentChar = (char) data;
-                if (readingnewline) {
-                    if (currentChar == '\n' || currentChar == '\r') {
-                        steps.add(new Step(singlestep, 0));
-                        readingnewline = false;
-                    } else {
-                        readingnewline = false;
-                    }
-                } else if (currentChar == '\n' || currentChar == '\r') {
-                    readingnewline = true;
-                }
 
+            while ((data = reader.read()) != -1) {
+                char currentChar = (char) data;
+
+                if ((currentChar == '\n' || currentChar == '\r') && (reader.read() == '\n' || reader.read() == '\r')) {
+                    if (isNewline) {
+                        steps.add(new Step(singlestep, 0));
+                        singlestep = "";
+                    }
+                    isNewline = true;
+                } else {
+                    singlestep += currentChar;
+                    isNewline = false;
+                }
             }
+            if (!singlestep.equals("")) {
+                steps.add(new Step(singlestep, 0));
+            }
+
         } catch (IOException e) {
             System.out.println("error");
         }
