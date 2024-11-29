@@ -43,7 +43,8 @@ public class Recipe implements Info {
     //reads files
     public void readRecipe(String f) {
         readIngredient(f);
-        readStep(f);
+        /*readStep(f);*/
+        readCookware(f);
     }
 
 
@@ -164,11 +165,68 @@ public class Recipe implements Info {
             System.out.println("error");
         }
     }
-
     public void readCookware(String f){
         File file = new File(f);
+
         try (FileReader reader = new FileReader(file)) {
             int data;
+            String cookware = "";
+            boolean readingckwr = false;
+            
+            while ((data = reader.read()) != -1) {
+                
+                if((char) data == '#') {
+                    cookware = "";
+                    readingckwr = true;
+                } else if (readingckwr) {
+
+                    if ((char) data == ' ') {
+
+                        boolean br = false;
+                        String tmpcookware = "";
+
+                        while ((data = reader.read()) != -1 ) {
+                            if ((char) data == '{') {
+                                cookwares.add(new Cookware(cookware));
+                                readingckwr = false;
+                            }else if((char) data == '@' || (char) data == '~'){
+                                boolean found = false;
+
+                                for(Cookware cookware1 : cookwares){
+                                    if(cookware1.getName().equals(cookware)){
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!found) {
+                                    cookwares.add(new Cookware(cookware));
+                                }
+
+                                br = true;
+                                break;
+
+                            } else {
+                                tmpcookware += (char) data;
+                            }
+                        }
+                        if(br) {
+                            break;
+                        } else {
+                            cookware += tmpcookware;
+
+                            readingckwr = false;
+                        }
+
+
+                    } else {
+                        cookware += (char) data;
+                    }
+
+                }
+
+            }
+        
         } catch (IOException e){
             System.out.println("error");
         }
