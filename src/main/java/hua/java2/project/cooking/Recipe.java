@@ -42,7 +42,8 @@ public class Recipe implements Info {
 
     //reads files
     public void readRecipe(String f) {
-
+        readIngredient(f);
+        readStep(f);
     }
 
 
