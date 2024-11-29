@@ -47,6 +47,8 @@ public class Recipe implements Info {
     }
 
 
+
+
     public void printInfo(){
         System.out.println("Yλικά: ");
         System.out.println();
@@ -103,7 +105,7 @@ public class Recipe implements Info {
                     quantity = 0;
                     unitMeasurment = "";
 
-                } else if (readingIngredient) {///////////////////////
+                } else if (readingIngredient) {
                     if ((char) data == '{') {
 
                         addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
@@ -166,35 +168,36 @@ public class Recipe implements Info {
     }
 
     public void readCookware(String f){
-        File file = new File(f);
-        try (FileReader reader = new FileReader(file)) {
-            int data;
-        } catch (IOException e){
-            System.out.println("error");
-        }
+        // sunarthsh gia cookware
     }
 
     public void readStep(String f){
         File file = new File(f);
         try (FileReader reader = new FileReader(file)) {
             int data;
-            boolean readingnewline = false;
-            String singlestep ="";
+            String singleStep ="";
+            boolean isNewline = false;
+
             while ((data = reader.read()) != -1) {
-                singlestep += (char) data;
                 char currentChar = (char) data;
-                if (readingnewline) {
-                    if (currentChar == '\n' || currentChar == '\r') {
-                        steps.add(new Step(singlestep, 0));
-                        readingnewline = false;
-                    } else {
-                        readingnewline = false;
+
+                if ((currentChar == '\n' || currentChar == '\r') && (reader.read() == '\n' || reader.read() == '\r')) {
+                    if (isNewline) {
+                        steps.add(new Step(singleStep, 0));
+                        singleStep = "";
                     }
-                } else if (currentChar == '\n' || currentChar == '\r') {
-                    readingnewline = true;
+                    isNewline = true;
+                } else {
+                    singleStep += currentChar;
+                    isNewline = false;
                 }
 
             }
+
+            if (!singleStep.equals("")) {
+                steps.add(new Step(singleStep, 0));
+            }
+
         } catch (IOException e) {
             System.out.println("error");
         }
