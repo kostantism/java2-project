@@ -46,9 +46,6 @@ public class Recipe implements Info {
         readStep(f);
     }
 
-
-
-
     public void printInfo(){
         System.out.println("Yλικά: ");
         System.out.println();
@@ -85,6 +82,7 @@ public class Recipe implements Info {
             System.out.println(counter + ". " + stps.getStep());
             counter++;
         }
+        System.out.println();
     }
 
     public void readIngredient(String f){
