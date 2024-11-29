@@ -47,8 +47,6 @@ public class Recipe implements Info {
     }
 
 
-
-
     public void printInfo(){
         System.out.println("Yλικά: ");
         System.out.println();
@@ -168,7 +166,12 @@ public class Recipe implements Info {
     }
 
     public void readCookware(String f){
-        // sunarthsh gia cookware
+        File file = new File(f);
+        try (FileReader reader = new FileReader(file)) {
+            int data;
+        } catch (IOException e){
+            System.out.println("error");
+        }
     }
 
     public void readStep(String f){
