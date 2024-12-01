@@ -17,9 +17,9 @@ public class MeasurementUnit implements UnitConvertion{
     }
 
     @Override
-    public float convert(int q, String name) {
-        
+    public String convert(float q, String name) {
 
-        return 0;
+
+        return "";
     }
 }
