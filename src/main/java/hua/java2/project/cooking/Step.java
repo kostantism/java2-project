@@ -4,17 +4,19 @@ public class Step {
 
     private String description;
     private int stepTime;
+    private String timeUnit;
 
-    public Step(String description, int stepTime) {
+    public Step(String description, int stepTime, String timeUnit) {
         this.description = description;
         this.stepTime = stepTime;
+        this.timeUnit = timeUnit;
     }
 
-    public String getStep() {
+    public String getDescription() {
         return description;
     }
 
-    public void setStep(String step) {
+    public void setDescription(String step) {
         this.description = description;
     }
 
@@ -24,5 +26,13 @@ public class Step {
 
     public void setStepTime(int stepTime) {
         this.stepTime = stepTime;
+    }
+
+    public String getTimeUnit() {
+        return timeUnit;
+    }
+
+    public void setTimeUnit(String timeUnit) {
+        this.timeUnit = timeUnit;
     }
 }

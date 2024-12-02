@@ -43,7 +43,6 @@ public class Recipe implements Info {
     //reads files
     public void readRecipe(String f) {
         readIngredient(f);
-        readCookware(f);
         readStep(f);
     }
 
@@ -65,13 +64,23 @@ public class Recipe implements Info {
         System.out.println();
 
         for(Cookware ckwrs : cookwares){
-            System.out.println("Όνομα: " + ckwrs.getName());
+            System.out.println(ckwrs.getName());
         }
         System.out.println();
 
         System.out.println("Συνολικός Χρόνος: ");
         System.out.println();
-        //xronos
+//        int time = 0;
+//        for (Step stps : steps){
+//            time += stps.getStepTime();
+//        }
+//        System.out.println(time);
+
+        for (Step stps : steps){
+            if(stps.getStepTime() != 0) {
+                System.out.println(stps.getStepTime() + " " + stps.getTimeUnit());
+            }
+        }
 
         System.out.println();
 
@@ -79,12 +88,12 @@ public class Recipe implements Info {
         System.out.println();
 
         int counter = 1;
-
         for (Step stps : steps){
-            System.out.println(counter + ". " + stps.getStep());
+            System.out.println(counter + ". " + stps.getDescription());
             System.out.println();
-            counter++;
         }
+
+
     }
 
     public void readIngredient(String f){
@@ -167,63 +176,72 @@ public class Recipe implements Info {
         }
     }
 
-    public void readCookware(String f) {
+    public void readCookware(String f){
         File file = new File(f);
 
         try (FileReader reader = new FileReader(file)) {
             int data;
             String cookware = "";
-            String tmpcookware= "";
-            boolean readingCookware = false;
+            boolean readingckwr = false;
 
             while ((data = reader.read()) != -1) {
-                char currentChar = (char) data;
 
-                if (currentChar == '#') {
-                    readingCookware = true;
+                if((char) data == '#') {
                     cookware = "";
-                } else if (readingCookware) {
-                    if (currentChar == '@' || currentChar == '~' || currentChar == '{') {
+                    readingckwr = true;
+                } else if (readingckwr) {
 
-                        if (!cookware.isEmpty()) {
-                            cookwares.add(new Cookware(cookware));
-                        }
-                        readingCookware = false;
-                    } else if ((char) data == ' ')  {
+                    if ((char) data == ' ') {
+
                         boolean br = false;
-                        tmpcookware = "";
-                        while ((data = reader.read()) != -1 ) {
+                        String tmpcookware = "";
 
+                        while ((data = reader.read()) != -1 ) {
                             if ((char) data == '{') {
                                 cookwares.add(new Cookware(cookware));
-                                break;
+                                readingckwr = false;
                             }else if((char) data == '@' || (char) data == '~'){
-                                cookwares.add(new Cookware(cookware));
+                                boolean found = false;
+
+                                for(Cookware cookware1 : cookwares){
+                                    if(cookware1.getName().equals(cookware)){
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!found) {
+                                    cookwares.add(new Cookware(cookware));
+                                }
+
                                 br = true;
                                 break;
-                            }else {
+
+                            } else {
                                 tmpcookware += (char) data;
-
                             }
-
                         }
                         if(br) {
                             break;
                         } else {
                             cookware += tmpcookware;
 
-                            readingCookware = false;
+                            readingckwr = false;
                         }
-                    }else {
+
+
+                    } else {
                         cookware += (char) data;
                     }
+
                 }
+
             }
-        } catch (IOException e) {
-            System.out.println("Σφάλμα κατά την ανάγνωση cookwares: ");
+
+        } catch (IOException e){
+            System.out.println("error");
         }
     }
-
 
     public void readStep(String f){
         File file = new File(f);
@@ -231,22 +249,62 @@ public class Recipe implements Info {
             int data;
             boolean isNewline = false;
             String singlestep ="";
+
+            String timeUnit ="";
+            int time = 0;
+            String tmpTimeUnit ="";
+            String tmpTime = "";
+            boolean readingTime = false;
+            boolean readingTimeUnit = false;
+
             while ((data = reader.read()) != -1) {
                 char currentChar = (char) data;
 
                 if ((currentChar == '\n' || currentChar == '\r') && (reader.read() == '\n' || reader.read() == '\r')) {
                     if (isNewline) {
-                        steps.add(new Step(singlestep, 0));
+                        steps.add(new Step(singlestep, time, timeUnit));
+                        time = 0;
                         singlestep = "";
                     }
                     isNewline = true;
-                }else {
+                } else {
+                    ////////////////////////////////////////
+                    if(currentChar == '~' && reader.read() == '{') {
+                        readingTime = true;
+                        time = 0;
+
+                    } else if (readingTime) {
+                        if (currentChar == '%') {
+
+                            time = Integer.parseInt(tmpTime);
+
+                            tmpTime = "";
+
+                            readingTimeUnit = true;
+
+                        } else if (readingTimeUnit) {
+                            if(currentChar == '}') {
+                                readingTimeUnit = false;
+                                readingTime = false;
+                                timeUnit = tmpTimeUnit;
+                                tmpTimeUnit ="";
+
+                            } else {
+                                tmpTimeUnit += currentChar;
+                            }
+
+                        } else {
+                            tmpTime += currentChar;
+                        }
+                    }
+                    ////////////////////////////////////////
                     singlestep += currentChar;
                     isNewline = false;
                 }
+
             }
             if (!singlestep.equals("")) {
-                steps.add(new Step(singlestep, 0));
+                steps.add(new Step(singlestep, time, timeUnit));
             }
 
         } catch (IOException e) {
@@ -392,127 +450,5 @@ public class Recipe implements Info {
 
         } catch (IOException e) {
             System.out.println("error");
-        }
-    }*/
-/*public void readCookware(String f){
-        File file = new File(f);
-
-        try (FileReader reader = new FileReader(file)) {
-            int data;
-            String cookware = "";
-            boolean readingckwr = false;
-
-            while ((data = reader.read()) != -1) {
-
-                if((char) data == '#') {
-                    cookware = "";
-                    readingckwr = true;
-                } else if (readingckwr) {
-
-                    if ((char) data == ' ') {
-
-                        boolean br = false;
-                        String tmpcookware = "";
-
-                        while ((data = reader.read()) != -1 ) {
-                            if ((char) data == '{') {
-                                cookwares.add(new Cookware(cookware));
-                                readingckwr = false;
-                            }else if((char) data == '@' || (char) data == '~'){
-                                boolean found = false;
-
-                                for(Cookware cookware1 : cookwares){
-                                    if(cookware1.getName().equals(cookware)){
-                                        found = true;
-                                        break;
-                                    }
-                                }
-
-                                if(!found) {
-                                    cookwares.add(new Cookware(cookware));
-                                }
-
-                                br = true;
-                                break;
-
-                            } else {
-                                tmpcookware += (char) data;
-                            }
-                        }
-                        if(br) {
-                            break;
-                        } else {
-                            cookware += tmpcookware;
-
-                            readingckwr = false;
-                        }
-
-
-                    } else {
-                        cookware += (char) data;
-                    }
-
-                }
-
-            }
-
-        } catch (IOException e){
-            System.out.println("error");
-        }
-    }*/
-/*public void readCookware(String f) {
-        File file = new File(f);
-
-        try (FileReader reader = new FileReader(file)) {
-            int data;
-            String cookware = "";
-            String tmpcookware= "";
-            boolean readingCookware = false;
-
-            while ((data = reader.read()) != -1) {
-                char currentChar = (char) data;
-
-                if (currentChar == '#') {
-                    readingCookware = true;
-                    cookware = "";
-                } else if (readingCookware) {
-                    if (currentChar == '@' || currentChar == '~' || currentChar == '{') {
-
-                        if (!cookware.isEmpty()) {
-                            cookwares.add(new Cookware(cookware));
-                        }
-                        readingCookware = false;
-                    } else if ((char) data == ' ')  {
-                        boolean br = false;
-                        tmpcookware = "";
-                        while ((data = reader.read()) != -1 ) {
-
-                            if ((char) data == '{') {
-                                cookwares.add(new Cookware(cookware));
-                                break;
-                            }else if((char) data == '@' || (char) data == '~'){
-                                cookwares.add(new Cookware(cookware));
-                                br = true;
-                                break;
-                            }else {
-                                tmpcookware += (char) data;
-
-                            }
-
-                        }
-                        if(br) {
-                            break;
-                        } else {
-                            cookware += tmpcookware;
-
-                            readingCookware = false;
-                        }
-                    }else {
-                        cookware += (char) data;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Σφάλμα κατά την ανάγνωση cookwares: ");
         }
     }*/
