@@ -239,54 +239,22 @@ public class Recipe implements Info {
             int data;
             boolean isNewline = false;
             String singlestep ="";
-            String tmpUnitMeasurment = "";
-            String unitMeasurment = "";
-            boolean readingTime = false;
-            boolean readingUnitMeasurment = false;
-            boolean readingNumberofTime = false;
-            int steptime = 0;
-            String tempsteptime="";
             while ((data = reader.read()) != -1) {
                 char currentChar = (char) data;
 
                 if ((currentChar == '\n' || currentChar == '\r') && (reader.read() == '\n' || reader.read() == '\r')) {
                     if (isNewline) {
-                        unitMeasurment = tmpUnitMeasurment;
-                        if(tempsteptime.equals("")) {
-                            steptime = 0;
-                        }else{
-                            steptime = steptime + Integer.parseInt(tempsteptime);
-                        }
-                        tempsteptime="";
-                        steps.add(new Step(singlestep, steptime));
+                        steps.add(new Step(singlestep, 0));
                         singlestep = "";
-                        steptime=0;
-                        unitMeasurment = "";
-                        tmpUnitMeasurment = "";
                     }
                     isNewline = true;
-                }else if ((char) data == '~') {
-                    readingTime = true;
-                } else if (readingTime && (char) data == '{' ) {
-                    readingNumberofTime = true;
-                    readingTime = false;
-                } else if(readingNumberofTime){
-                    if ((char) data != '%'){
-                        tempsteptime += (char) data;
-                    }else{
-                        readingNumberofTime = false;
-                    }
-                }else if ((char) data == '%') {
-                    readingUnitMeasurment = true;
-                } else if (readingUnitMeasurment) {
-                    tmpUnitMeasurment += (char) data;
                 }else {
                     singlestep += currentChar;
                     isNewline = false;
                 }
             }
             if (!singlestep.equals("")) {
-                steps.add(new Step(singlestep, steptime));
+                steps.add(new Step(singlestep, 0));
             }
 
         } catch (IOException e) {
