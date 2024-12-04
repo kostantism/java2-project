@@ -43,6 +43,7 @@ public class Recipe implements Info {
     //reads files
     public void readRecipe(String f) {
         readIngredient(f);
+        readCookware(f);
         readStep(f);
     }
 
@@ -177,7 +178,7 @@ public class Recipe implements Info {
         }
     }
 
-    public void readCookware(String f){
+    public void readCookware(String f) {
         File file = new File(f);
 
         try (FileReader reader = new FileReader(file)) {
@@ -186,63 +187,58 @@ public class Recipe implements Info {
             boolean readingckwr = false;
 
             while ((data = reader.read()) != -1) {
+                char currentChar = (char) data;
 
-                if((char) data == '#') {
+                if (currentChar == '#') {
                     cookware = "";
                     readingckwr = true;
                 } else if (readingckwr) {
 
-                    if ((char) data == ' ') {
+                    if (currentChar == ' ') {
+                        String tmpCookware = "";
 
-                        boolean br = false;
-                        String tmpcookware = "";
+                        while ((data = reader.read()) != -1) {
+                            currentChar = (char) data;
 
-                        while ((data = reader.read()) != -1 ) {
-                            if ((char) data == '{') {
+                            if (currentChar == '{') {
+                                cookware += tmpCookware;
                                 cookwares.add(new Cookware(cookware));
                                 readingckwr = false;
-                            }else if((char) data == '@' || (char) data == '~'){
-                                boolean found = false;
+                                break;
+                            } else if (currentChar == '@' || currentChar == '~') {
 
-                                for(Cookware cookware1 : cookwares){
-                                    if(cookware1.getName().equals(cookware)){
-                                        found = true;
-                                        break;
-                                    }
-                                }
-
-                                if(!found) {
+                                if (!cookwareExists(cookware)) {
                                     cookwares.add(new Cookware(cookware));
                                 }
-
-                                br = true;
+                                readingckwr = false;
                                 break;
-
                             } else {
-                                tmpcookware += (char) data;
+                                tmpCookware += currentChar;
                             }
-                        }
-                        if(br) {
-                            break;
-                        } else {
-                            cookware += tmpcookware;
 
-                            readingckwr = false;
                         }
-
 
                     } else {
-                        cookware += (char) data;
+                        cookware += currentChar;
                     }
 
                 }
-
             }
 
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("error");
         }
     }
+
+    private boolean cookwareExists(String cookware) {
+        for (Cookware ckwr : cookwares) {
+            if (ckwr.getName().equals(cookware)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void readStep(String f){
         File file = new File(f);
