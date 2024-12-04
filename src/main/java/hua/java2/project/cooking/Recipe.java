@@ -91,6 +91,7 @@ public class Recipe implements Info {
         for (Step stps : steps){
             System.out.println(counter + ". " + stps.getDescription());
             System.out.println();
+            counter++;
         }
 
 
