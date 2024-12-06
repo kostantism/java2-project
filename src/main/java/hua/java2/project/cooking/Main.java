@@ -9,6 +9,7 @@ public class Main {
         //test object
         Recipe r = new Recipe(null, null, null, null, 0);
         ShoppingList sl = new ShoppingList(null);
+        Time t = new Time("");
 
         if(args.length == 0) {
             System.out.println("No arguments provided.");
@@ -26,6 +27,8 @@ public class Main {
             //2η λειτουργια
 
             sl.printShoppingList(args, args.length);
+
+            System.out.println(t.convert(80, "minutes"));
 
         } else if(args[0].equals("-list") && args.length == 1) {
             System.out.println("You should provide a recipe.");
