@@ -1,12 +1,14 @@
 package hua.java2.project.cooking;
 
+import java.util.ArrayList;
+
 public class Step {
 
     private String description;
-    private int stepTime;
+    private float stepTime;///////////////
     private String timeUnit;
 
-    public Step(String description, int stepTime, String timeUnit) {
+    public Step(String description, float stepTime, String timeUnit) {
         this.description = description;
         this.stepTime = stepTime;
         this.timeUnit = timeUnit;
@@ -20,11 +22,11 @@ public class Step {
         this.description = description;
     }
 
-    public int getStepTime() {
+    public float getStepTime() {
         return stepTime;
     }
 
-    public void setStepTime(int stepTime) {
+    public void setStepTime(float stepTime) {
         this.stepTime = stepTime;
     }
 

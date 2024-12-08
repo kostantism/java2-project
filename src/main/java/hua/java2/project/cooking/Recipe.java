@@ -8,14 +8,15 @@ import java.util.List;
 
 public class Recipe implements Info {
 
+    Time t = new Time(0, "");
+
     private String name;
     private ArrayList<Ingredient> ingredients; //@ , @ {quantity%MeasurementUnit}
     private ArrayList<Cookware> cookwares; // #, # {}
-    private List<Step> steps; // newline
-    private int totalTime; // ~{ti%me}
-    private String filepath;
+    private ArrayList<Step> steps; // newline
+    private float totalTime; // ~{ti%me}
 
-    public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Cookware> cookwares, List<Step> steps, int totalTime) {
+    public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Cookware> cookwares, ArrayList<Step> steps, float totalTime) {
         this.name = name;
         this.ingredients = new ArrayList<>();
         this.cookwares = new ArrayList<>();
@@ -31,11 +32,11 @@ public class Recipe implements Info {
         this.name = name;
     }
 
-    public int getTotalTime() {
+    public float getTotalTime() {
         return totalTime;
     }
 
-    public void setTotalTime(int totalTime) {
+    public void setTotalTime(float totalTime) {
         this.totalTime = totalTime;
     }
 
@@ -46,7 +47,6 @@ public class Recipe implements Info {
         readCookware(f);
         readStep(f);
     }
-
 
     public void printInfo(){
         System.out.println("Yλικά: ");
@@ -71,18 +71,8 @@ public class Recipe implements Info {
 
         System.out.println("Συνολικός Χρόνος: ");
         System.out.println();
-//        int time = 0;
-//        for (Step stps : steps){
-//            time += stps.getStepTime();
-//        }
-//        System.out.println(time);
 
-        for (Step stps : steps){
-            if(stps.getStepTime() != 0) {
-                System.out.println(stps.getStepTime() + " " + stps.getTimeUnit());
-            }
-        }
-
+        System.out.println(t.convert(totalTime, "minutes"));
         System.out.println();
 
         System.out.println("Αναλυτικά τα βήματα: ");
@@ -94,7 +84,6 @@ public class Recipe implements Info {
             System.out.println();
             counter++;
         }
-
 
     }
 
@@ -116,7 +105,7 @@ public class Recipe implements Info {
                     quantity = 0;
                     unitMeasurment = "";
 
-                } else if (readingIngredient) {///////////////////////
+                } else if (readingIngredient) {
                     if ((char) data == '{') {
 
                         addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
@@ -125,47 +114,65 @@ public class Recipe implements Info {
 
                     } else if ((char) data == ' ') {
 
-                        boolean br = false;
-                        String tmpIngredient = "";
+                        try (FileReader secReader = new FileReader(file)) {
 
-                        while ((data = reader.read()) != -1 ) {
-                            if ((char) data == '{') {
+                            String tmpIngredient = "";
 
-                                addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
+                            while ((data = secReader.read()) != -1) {
+                                if ((char) data == '{') {
+                                    ingredient += ' ' + tmpIngredient;
 
-                                break;
+                                    addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
 
-                            } else if((char) data == '#' || (char) data == '~'){
-                                boolean found = false;
+                                    break;
 
-                                for(Ingredient i : ingredients){
-                                    if(i.getName().equals(ingredient)){
-                                        i.setQuantity(i.getQuantity() + 1);
-                                        found = true;
-                                        break;
+                                } else if ((char) data == '#' || (char) data == '~' || (char) data == '@' || (char) data == '.' || (char) data == ',') {
+                                    boolean found = false;
+
+                                    for (Ingredient i : ingredients) {
+                                        if (i.getName().equals(ingredient)) {
+                                            i.setQuantity(i.getQuantity() + 1);
+                                            found = true;
+                                            break;
+                                        }
                                     }
+
+                                    if (!found) {
+                                        ingredients.add(new Ingredient(ingredient, 1, ""));
+                                        ingredient = "";
+                                    }
+
+                                    break;
+
+                                } else {
+                                    tmpIngredient += (char) data;
                                 }
 
-                                if(!found) {
-                                    ingredients.add(new Ingredient(ingredient, 1, ""));
-                                }
+                            }
 
-                                br = true;
+                            readingIngredient = false;
+
+                        } catch (IOException e) {
+                            System.out.println("error");
+                        }
+
+                    } else if ((char) data == '#' || (char) data == '~' || (char) data == '.' || (char) data == ',' ) {
+                        boolean found = false;
+
+                        for (Ingredient i : ingredients) {
+                            if (i.getName().equals(ingredient)) {
+                                i.setQuantity(i.getQuantity() + 1);
+                                found = true;
                                 break;
-
-                            } else {
-                                tmpIngredient += (char) data;
-
                             }
                         }
 
-                        if(br) {
-                            break;
-                        } else {
-                            ingredient += tmpIngredient;
-
-                            readingIngredient = false;
+                        if (!found) {
+                            ingredients.add(new Ingredient(ingredient, 1, ""));
+                            ingredient = "";
                         }
+
+                        readingIngredient = false;
 
                     } else {
                         ingredient += (char) data;
@@ -248,34 +255,50 @@ public class Recipe implements Info {
             String singlestep ="";
 
             String timeUnit ="";
-            int time = 0;
+            float time = 0;/////////
             String tmpTimeUnit ="";
             String tmpTime = "";
             boolean readingTime = false;
             boolean readingTimeUnit = false;
+
+            totalTime = 0;
 
             while ((data = reader.read()) != -1) {
                 char currentChar = (char) data;
 
                 if ((currentChar == '\n' || currentChar == '\r') && (reader.read() == '\n' || reader.read() == '\r')) {
                     if (isNewline) {
-                        steps.add(new Step(singlestep, time, timeUnit));
+
+                        //steps.add(new Step(singlestep, time, timeUnit));
+                        steps.add(new Step(singlestep, time, "minutes"));
+
                         time = 0;
                         singlestep = "";
+
                     }
                     isNewline = true;
                 } else {
-                    ////////////////////////////////////////
+
+                    boolean found = false;
+
                     if(currentChar == '~' && reader.read() == '{') {
+                        found = true;
                         readingTime = true;
-                        time = 0;
+                        //time = 0;
+
+                        if(tmpTimeUnit.equals("minutes")){
+                            totalTime += Float.parseFloat(tmpTime);
+                        } else if(tmpTimeUnit.equals("hours")){
+                            totalTime += Float.parseFloat(tmpTime) * 60;
+                        }
+
+                        tmpTime = "";
+                        tmpTimeUnit ="";
 
                     } else if (readingTime) {
                         if (currentChar == '%') {
 
-                            time = Integer.parseInt(tmpTime);
-
-                            tmpTime = "";
+                            time += Float.parseFloat(tmpTime);
 
                             readingTimeUnit = true;
 
@@ -284,7 +307,6 @@ public class Recipe implements Info {
                                 readingTimeUnit = false;
                                 readingTime = false;
                                 timeUnit = tmpTimeUnit;
-                                tmpTimeUnit ="";
 
                             } else {
                                 tmpTimeUnit += currentChar;
@@ -294,12 +316,24 @@ public class Recipe implements Info {
                             tmpTime += currentChar;
                         }
                     }
-                    ////////////////////////////////////////
+
                     singlestep += currentChar;
+                    if(found){
+                        singlestep += '{';
+                    }
                     isNewline = false;
                 }
 
             }
+
+            if(!tmpTime.equals("")){
+                if(tmpTimeUnit.equals("minutes")){
+                    totalTime += Float.parseFloat(tmpTime);
+                } else if(tmpTimeUnit.equals("hours")){
+                    totalTime += Float.parseFloat(tmpTime) * 60;
+                }
+            }
+
             if (!singlestep.equals("")) {
                 steps.add(new Step(singlestep, time, timeUnit));
             }
@@ -322,6 +356,13 @@ public class Recipe implements Info {
             } else {
                 tmpQuantity += (char) data;
             }
+        }
+
+        if(tmpQuantity.equals("")){
+            tmpQuantity = "1";
+        }
+        if(tmpUnitMeasurment.equals("")){
+            tmpUnitMeasurment = "";
         }
 
         quantity = Integer.parseInt(tmpQuantity);
@@ -348,104 +389,3 @@ public class Recipe implements Info {
         printInfo();
     }
 }
-
-// ΓΙΑ ΤΑ ΣΤΕΠΣ
-           /*while ((data = reader.read()) != -1) {
-                singlestep += (char) data;
-
-                if ((char) data == '#') {
-                    readingCookware = true;
-                    cookware = "";
-
-                } else if (readingCookware) {
-                    if ((char) data == '{') {
-
-                        boolean ckwrfound = false;
-
-                        for (Cookware c : cookwares) {
-                            if (c.getName().equals(cookware)) {
-                                ckwrfound = true;
-                                break;
-                            }
-                        }
-
-                        if (!ckwrfound) {
-                            cookwares.add(new Cookware(cookware));
-                        }
-
-                        readingCookware = false;
-
-                    } else if ((char) data == ' ') {
-                        boolean br = false;
-                        String tmpcookware = "";
-
-                        while ((data = reader.read()) != -1) {
-                        }
-                        if ((char) data == '{') {
-                            boolean ckwrfound = false;
-
-                            for (Cookware c : cookwares) {
-                                if (c.getName().equals(cookware)) {
-                                    ckwrfound = true;
-                                    break;
-                                }
-                            }
-
-                            if (!ckwrfound) {
-                                cookwares.add(new Cookware(cookware));
-                            }
-
-                            break;
-
-                        } else if ((char) data == '@' || (char) data == '~') {
-                            boolean found = false;
-
-                            for (Cookware cookware1 : cookwares) {
-                                if (cookware1.getName().equals(cookware)) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-
-                            if (!found) {
-                                cookwares.add(new Cookware(cookware));
-                            }
-
-                            br = true;
-                            break;
-
-                        } else {
-                            tmpcookware += (char) data;
-
-                        }
-                        if (br) {
-                            break;
-                        } else {
-                            cookware += tmpcookware;
-
-                            readingCookware = false;
-                        }
-
-                    } else {
-                        cookware += (char) data;
-                    }
-                }
-            }
-            while ((data = reader.read()) != -1) {
-                if (newlinefound) {
-                    if ((char) data == '\n' || ((char) data == '\r')) {
-                        steps.add(new Step(singlestep, timeofastep));
-                        newlinefound = false;
-                        singlestep = "";
-                    }
-                }
-
-                if ((char) data == '\n' || ((char) data == '\r')) {
-                    newlinefound = true;
-                }
-            }
-
-        } catch (IOException e) {
-            System.out.println("error");
-        }
-    }*/

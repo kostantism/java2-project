@@ -9,7 +9,7 @@ public class Main {
         //test object
         Recipe r = new Recipe(null, null, null, null, 0);
         ShoppingList sl = new ShoppingList(null);
-        Time t = new Time("");
+        Time t = new Time(0, "");
 
         if(args.length == 0) {
             System.out.println("No arguments provided.");

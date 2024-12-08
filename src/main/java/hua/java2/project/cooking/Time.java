@@ -4,21 +4,30 @@ import java.util.Objects;
 
 public class Time implements UnitConvertion{
 
-    private String time;
+    private float time;
+    private String timeUnit;
 
-    public Time(String time) {
+    public Time(float time, String timeUnit) {
         this.time = time;
+        this.timeUnit = timeUnit;
     }
 
-    public String getTime() {
+    public float getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(float time) {
         this.time = time;
     }
 
-    @Override
+    public String getTimeUnit() {
+        return timeUnit;
+    }
+
+    public void setTimeUnit(String timeUnit) {
+        this.timeUnit = timeUnit;
+    }
+
     public String convert(float q, String name) {
         float x = 0;
 
@@ -56,5 +65,16 @@ public class Time implements UnitConvertion{
         minutes = h*60;
 
         return minutes + " minutes";
+    }
+
+    public static int addMinutes(int q, String name){
+        int minutes = 0;
+
+        if(name.equals("hours")){
+            minutes += q*60;
+        } else if (name.equals("minutes")) {
+            minutes += q;
+        }
+        return minutes;
     }
 }
