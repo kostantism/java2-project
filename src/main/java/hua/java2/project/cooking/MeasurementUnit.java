@@ -22,4 +22,42 @@ public class MeasurementUnit implements UnitConvertion{
 
         return "";
     }
+
+    private String convertToKg(int g) {
+        int kg;
+        int gr;
+
+        if(g < 1000){
+            return g + " gr";
+
+        } else if((g % 1000) != 0){
+            kg = g/1000;
+            gr = g%1000;
+            return kg + " kg " + gr + " gr";
+
+        } else {
+            kg = g/1000;
+            return kg + " kg";
+        }
+    }
+
+    private String convertToGr(float kg) {
+        float gr;
+
+        gr = kg*1000;
+
+        return gr + " gr";
+    }
+
+    private String convertToL() {
+        return "";
+    }
+
+    private String convertToMl() {
+        return "";
+    }
+
+    private String addNewUnit() {
+        return "";
+    }
 }
