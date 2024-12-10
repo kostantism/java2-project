@@ -204,8 +204,9 @@ public class Recipe implements Info {
                     cookware = "";
                     readingckwr = true;
                 } else if (readingckwr) {
-
-                    if (currentChar == ' ' || currentChar == ',' || currentChar == '.') {
+                    if (currentChar == '{') {
+                        readingckwr = false;
+                    }else if (currentChar == ' ' ) {
                         String tmpCookware = "";
 
                         while ((data = reader.read()) != -1) {
@@ -224,14 +225,27 @@ public class Recipe implements Info {
                                 if (!cookwareExists(cookware)) {
                                     cookwares.add(new Cookware(cookware));
                                 }
-                                readingckwr = false;
+                                if (currentChar == '#'){
+                                    cookware = "";
+                                    tmpCookware="";
+
+                                }else{
+                                    readingckwr = false;
+                                }
                                 break;
+
+
+
                             } else {
                                 tmpCookware += currentChar;
                             }
 
                         }
 
+                    } else if (currentChar == '@' || currentChar == '.' || currentChar == ',' || currentChar == '~' ) {
+                        cookwares.add(new Cookware(cookware));
+                        cookware = "";
+                        readingckwr = false;
                     } else {
                         cookware += currentChar;
                     }
