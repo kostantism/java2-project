@@ -119,6 +119,22 @@ public class ShoppingList implements Info {
                     }
                 }
             }
+            if(!ingredient.equals("")) {
+                boolean found = false;
+
+                for (Ingredient i : ingredients) {
+                    if (i.getName().equals(ingredient)) {
+                        i.setQuantity(i.getQuantity() + 1);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    ingredients.add(new Ingredient(ingredient, 1, ""));
+                    ingredient = "";
+                }
+            }
 
         } catch (IOException e) {
             System.out.println("error");

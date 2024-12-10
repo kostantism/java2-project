@@ -253,8 +253,10 @@ public class Recipe implements Info {
                 }
             }
 
-            if (readingckwr && !cookware.isEmpty()) {
-                cookwares.add(new Cookware(cookware.trim()));
+            if (!cookware.isEmpty()) {
+                if (!cookwareExists(cookware)) {
+                    cookwares.add(new Cookware(cookware));
+                }
             }
 
         } catch (IOException e) {
