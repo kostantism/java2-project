@@ -29,7 +29,6 @@ public class Time implements UnitConvertion{
     }
 
     public String convert(float q, String name) {
-        float x = 0;
 
         if(name.equals("minutes")) {
             return convertToHours((int) q);

@@ -19,8 +19,18 @@ public class MeasurementUnit implements UnitConvertion{
     @Override
     public String convert(float q, String name) {
 
+        if(name.equals("gr")) {
+            return convertToKg((int) q);
+        } else if(name.equals("kg")) {
+            return convertToGr(q);
+        } else if(name.equals("ml")) {
+            return convertToL((int) q);
+        } else if(name.equals("l")) {
+            return convertToMl(q);
+        } else {
+            throw new IllegalArgumentException();
+        }
 
-        return "";
     }
 
     private String convertToKg(int g) {
@@ -49,15 +59,55 @@ public class MeasurementUnit implements UnitConvertion{
         return gr + " gr";
     }
 
-    private String convertToL() {
-        return "";
+    private String convertToL(int m) {
+        int l;
+        int ml;
+
+        if(m < 1000){
+            return m + " ml";
+
+        } else if((m % 1000) != 0){
+            l = m/1000;
+            ml = m%1000;
+            return l + " l " + ml + " ml";
+
+        } else {
+            l = m/1000;
+            return l + " l";
+        }
     }
 
-    private String convertToMl() {
-        return "";
+    private String convertToMl(float l) {
+        float ml;
+
+        ml = l*1000;
+
+        return ml + " ml";
     }
 
     private String addNewUnit() {
         return "";
+    }
+
+    public static int addGr(float q, String name){
+        int gr = 0;
+
+        if(name.equals("kg")){
+            gr += q*1000;
+        } else if (name.equals("gr")) {
+            gr += q;
+        }
+        return gr;
+    }
+
+    public static int addMl(float q, String name){
+        int ml = 0;
+
+        if(name.equals("l")){
+            ml += q*1000;
+        } else if (name.equals("ml")) {
+            ml += q;
+        }
+        return ml;
     }
 }
