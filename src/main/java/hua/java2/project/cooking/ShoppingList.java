@@ -1,38 +1,20 @@
 package hua.java2.project.cooking;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ShoppingList implements Info {
 
     MeasurementUnit ms = new MeasurementUnit("");
 
-    //private List<Ingredient> ingredients;
     private Map<String, Map<String, Float>> ingredients;
-
-
-//    public ShoppingList(List<Ingredient> ingredients) {
-//        this.ingredients = new ArrayList<>();
-//    }
 
     public ShoppingList() {
         this.ingredients = new HashMap<>();
     }
-
-//    public void printInfo(){
-//        System.out.println("Λίστα αγορών:");
-//        System.out.println();
-//        for(Ingredient i : ingredients){
-//            System.out.println("Όνομα: " + i.getName() + " Ποσότητα: " + i.getQuantity() + " " + i.getMeasurmentUnit());
-//        }
-//        System.out.println();
-//    }
 
     public void printInfo() {
         System.out.println("Λίστα αγορών:");
@@ -44,13 +26,17 @@ public class ShoppingList implements Info {
             for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
                 if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
                         measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
-                        System.out.println(" - " + ms.convert(measurementEntry.getValue(), measurementEntry.getKey()));
+                        if(measurementEntry.getValue() != 0) {
+                            System.out.println(" - " + ms.convert(measurementEntry.getValue(), measurementEntry.getKey()));
+                        }
                 } else {
                     float quantity = measurementEntry.getValue();
-                    if(quantity % 1 == 0) {
-                        System.out.println("  - " + (int) quantity + " " + measurementEntry.getKey());
-                    } else {
-                        System.out.println("  - " + quantity + " " + measurementEntry.getKey());
+                    if(quantity != 0) {
+                        if (quantity % 1 == 0) {
+                            System.out.println("  - " + (int) quantity + " " + measurementEntry.getKey());
+                        } else {
+                            System.out.println("  - " + quantity + " " + measurementEntry.getKey());
+                        }
                     }
                 }
             }
@@ -58,8 +44,7 @@ public class ShoppingList implements Info {
         }
     }
 
-
-    //reads files
+    //διαβαζει το αρχειο και αποθηκευει τα υλικα με τις ποσοτητες τους
     public void readRecipe(String f) {
         File file = new File(f);
 
@@ -101,22 +86,8 @@ public class ShoppingList implements Info {
                                 break;
 
                             } else if ((char) data == '#' || (char) data == '~' || (char) data == '@' || (char) data == '.' || (char) data == ',') {
-//                                boolean found = false;
 
-//                                for (Ingredient i : ingredients) {
-//                                    if (i.getName().equals(ingredient)) {
-//                                        i.setQuantity(i.getQuantity() + 1);
-//                                        found = true;
-//                                        break;
-//                                    }
-//                                }
-//
-//                                if (!found) {
-//                                    ingredients.add(new Ingredient(ingredient, 1, ""));
-//                                    ingredient = "";
-//                                }
-
-                                addOrUpdateIngredient(ingredients, ingredient, "", 1);
+                                addOrUpdateIngredient(ingredients, ingredient, "", quantity);
 
                                 if((char) data == '@'){
                                     ingredient = "";
@@ -134,22 +105,7 @@ public class ShoppingList implements Info {
                         }
 
                     } else if ((char) data == '#' || (char) data == '~' || (char) data == '.' || (char) data == ',' ) {
-//                        boolean found = false;
-
-//                        for (Ingredient i : ingredients) {
-//                            if (i.getName().equals(ingredient)) {
-//                                i.setQuantity(i.getQuantity() + 1);
-//                                found = true;
-//                                break;
-//                            }
-//                        }
-//
-//                        if (!found) {
-//                            ingredients.add(new Ingredient(ingredient, 1, ""));
-//                            ingredient = "";
-//                        }
-
-                        addOrUpdateIngredient(ingredients, ingredient, "", 1);
+                        addOrUpdateIngredient(ingredients, ingredient, "", quantity);
 
                         readingIngredient = false;
 
@@ -158,23 +114,9 @@ public class ShoppingList implements Info {
                     }
                 }
             }
-            if(!ingredient.equals("")) {
-//                boolean found = false;
 
-//                for (Ingredient i : ingredients) {
-//                    if (i.getName().equals(ingredient)) {
-//                        i.setQuantity(i.getQuantity() + 1);
-//                        found = true;
-//                        break;
-//                    }
-//                }
-//
-//                if (!found) {
-//                    ingredients.add(new Ingredient(ingredient, 1, ""));
-//                    ingredient = "";
-//                }
-
-                addOrUpdateIngredient(ingredients, ingredient, "", 1);
+            if(!ingredient.isEmpty()) {
+                addOrUpdateIngredient(ingredients, ingredient, "", quantity);
             }
 
         } catch (IOException e) {
@@ -207,23 +149,10 @@ public class ShoppingList implements Info {
         quantity = Float.parseFloat(tmpQuantity);
         unitMeasurment = tmpUnitMeasurment;
 
-//        boolean found = false;
-//
-//        for(Ingredient i : ingredients){
-//            if(i.getName().equals(ingredient)){
-//                i.setQuantity(i.getQuantity() + quantity);
-//                found = true;
-//                break;
-//            }
-//        }
-//
-//        if(!found) {
-//            ingredients.add(new Ingredient(ingredient, quantity, unitMeasurment));
-//        }
-
         addOrUpdateIngredient(ingredients, ingredient, unitMeasurment, quantity);
     }
 
+    //διαβαζει οσες συνταγες δωσει ο χρηστης
     public void readRecipes(String[] args, int argsLength) {
         int i;
 
@@ -232,12 +161,12 @@ public class ShoppingList implements Info {
         }
     }
 
+    //εκτυπωνει την λιστα αγορων
     public void printShoppingList(String[] args, int argsLength) {
         readRecipes(args, args.length);
 
         printInfo();
     }
-
 
     public static void addOrUpdateIngredient(Map<String, Map<String, Float>> ingredients,
                                              String ingredient, String unit, float quantity) {
@@ -250,7 +179,6 @@ public class ShoppingList implements Info {
             unit = "ml";
         }
 
-        // Check if the ingredient already exists in the outer map
         if (ingredients.containsKey(ingredient)) {
             // If the ingredient exists, get the inner map of unit measurements
             Map<String, Float> units = ingredients.get(ingredient);

@@ -61,13 +61,17 @@ public class Recipe implements Info {
             for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
                 if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
                         measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
-                    System.out.println(" - " + ms.convert(measurementEntry.getValue(), measurementEntry.getKey()));
+                    if(measurementEntry.getValue() != 0) {
+                        System.out.println(" - " + ms.convert(measurementEntry.getValue(), measurementEntry.getKey()));
+                    }
                 } else {
                     float quantity = measurementEntry.getValue();
-                    if(quantity % 1 == 0) {
-                        System.out.println("  - " + (int) quantity + " " + measurementEntry.getKey());
-                    } else {
-                        System.out.println("  - " + quantity + " " + measurementEntry.getKey());
+                    if(quantity != 0) {
+                        if (quantity % 1 == 0) {
+                            System.out.println("  - " + (int) quantity + " " + measurementEntry.getKey());
+                        } else {
+                            System.out.println("  - " + quantity + " " + measurementEntry.getKey());
+                        }
                     }
                 }
             }
@@ -92,13 +96,6 @@ public class Recipe implements Info {
 
         System.out.println("Αναλυτικά τα βήματα: ");
         System.out.println();
-
-//        int counter = 1;
-//        for (Step stps : steps){
-//            System.out.println(counter + ". " + stps.getDescription());
-//            System.out.println();
-//            counter++;
-//        }
 
         int counter = 1;
         for (Step stps : steps) {
@@ -315,7 +312,6 @@ public class Recipe implements Info {
         return false;
     }
 
-
     public void readStep(String f) {
         File file = new File(f);
 
@@ -489,12 +485,11 @@ public class Recipe implements Info {
                     } else if (readingckwr) {
                         if (currentChar == '{') {
 
-                            singlestep += '{';//////////////////////
+                            singlestep += '{';
 
                             if (!cookwareExists(cookware, tmpCookwares)) {
                                 tmpCookwares.add(new Cookware(cookware));
                             }
-
                             readingckwr = false;
 
                         } else if (currentChar == ' ' ) {
@@ -506,70 +501,52 @@ public class Recipe implements Info {
                                 currentChar = (char) data;
 
                                 if (currentChar == '{') {
-//                                    found = true;
-                                    singlestep += tmpCookware;///////////
-                                    singlestep += '{';////////////////
+                                    singlestep += tmpCookware;
+                                    singlestep += '{';
 
                                     if (!cookware.isEmpty()) {
                                         cookware += " ";
                                     }
 
-//                                    singlestep += ' ' + tmpCookware;
-
                                     cookware += tmpCookware.trim();
                                     if (!cookwareExists(cookware, tmpCookwares)) {
                                         tmpCookwares.add(new Cookware(cookware));
                                     }
+                                    cookware = "";
                                     readingckwr = false;
                                     break;
 
                                 } else if (currentChar == '@' || currentChar == '~' || currentChar== '.' || currentChar == ',' || currentChar == '#') {
 
                                     singlestep += tmpCookware;
-                                    singlestep += currentChar;
 
                                     if (!cookwareExists(cookware, tmpCookwares)) {
                                         tmpCookwares.add(new Cookware(cookware));
                                     }
 
-                                    /////////////////////////////
                                     if ((char) data == '@') {
                                         readingIngredient = true;
                                         readingckwr = false;
                                         ingredient = "";
-//                                        tmpIngredient = "";
 
                                     } else if((char) data == '#') {
                                         cookware = "";
-//                                        readingckwr = true;
-//                                        readingIngredient = false;
 
                                     } else if((char) data == '~' && reader.read() == '{') {
+                                        found = true;
                                         readingTime = true;
                                         readingckwr = false;
-//                                        tmpTime = "";
-//                                        tmpTimeUnit = "";
-                                        time = 0;///////////////////
-                                        timeUnit = "";//////////
-//                                        found = true;
+                                        time = 0;
+                                        timeUnit = "";
 
                                     } else {
                                         readingckwr = false;
                                     }
-                                    ////////////////////////////
 
-//                                    if (currentChar == '#') {
-//                                        cookware = "";
-//                                        tmpCookware="";
-//
-//                                    } else {
-//                                        readingckwr = false;
-//                                    }
                                     break;
 
                                 } else {
                                     tmpCookware += currentChar;
-//                                    singlestep += currentChar;//////////////
                                 }
 
                             }
