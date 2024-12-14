@@ -1,15 +1,10 @@
 package hua.java2.project.cooking;
 
-import java.io.File;
-import java.util.Objects;
-
 public class Main {
     public static void main(String[] args) {
 
-        //test object
         Recipe r = new Recipe(null, null, null, null, 0);
         ShoppingList sl = new ShoppingList();
-        Time t = new Time(0, "");
 
         if(args.length == 0) {
             System.out.println("No arguments provided.");
@@ -28,13 +23,12 @@ public class Main {
 
             sl.printShoppingList(args, args.length);
 
-        } else if(args[0].equals("-list") && args.length == 1) {
+        } else if(args[0].equals("-list")) {
             System.out.println("You should provide a recipe.");
 
         } else {
             System.out.println("You should type '-list'.");
 
         }
-
     }
 }

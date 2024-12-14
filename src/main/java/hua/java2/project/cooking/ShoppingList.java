@@ -16,7 +16,7 @@ public class ShoppingList implements Info {
         this.ingredients = new HashMap<>();
     }
 
-    public void printInfo() {
+    public void printInfo(int numOfPeople) {
         System.out.println("Λίστα αγορών:");
         System.out.println();
         for (Map.Entry<String, Map<String, Float>> ingredientEntry : ingredients.entrySet()) {
@@ -27,15 +27,15 @@ public class ShoppingList implements Info {
                 if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
                         measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
                         if(measurementEntry.getValue() != 0) {
-                            System.out.println(" - " + ms.convert(measurementEntry.getValue(), measurementEntry.getKey()));
+                            System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
                         }
                 } else {
                     float quantity = measurementEntry.getValue();
                     if(quantity != 0) {
                         if (quantity % 1 == 0) {
-                            System.out.println("  - " + (int) quantity + " " + measurementEntry.getKey());
+                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
                         } else {
-                            System.out.println("  - " + quantity + " " + measurementEntry.getKey());
+                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
                         }
                     }
                 }
@@ -120,7 +120,7 @@ public class ShoppingList implements Info {
             }
 
         } catch (IOException e) {
-            System.out.println("error");
+            System.out.println("Εrror reading the file!\nTry again.");
         }
     }
 
@@ -139,10 +139,10 @@ public class ShoppingList implements Info {
             }
         }
 
-        if(tmpQuantity.equals("")){
+        if(tmpQuantity.isEmpty()){
             tmpQuantity = "1";
         }
-        if(tmpUnitMeasurment.equals("")){
+        if(tmpUnitMeasurment.isEmpty()){
             tmpUnitMeasurment = "";
         }
 
@@ -163,9 +163,11 @@ public class ShoppingList implements Info {
 
     //εκτυπωνει την λιστα αγορων
     public void printShoppingList(String[] args, int argsLength) {
+        int numOfPeople = Recipe.numOfPeople();
+
         readRecipes(args, args.length);
 
-        printInfo();
+        printInfo(numOfPeople);
     }
 
     public static void addOrUpdateIngredient(Map<String, Map<String, Float>> ingredients,

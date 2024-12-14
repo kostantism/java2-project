@@ -11,9 +11,7 @@ public class Step {
     private String timeUnit;
 
     private Map<String, Map<String, Float>> ingredients;
-//    private Map<String, Integer> times;
     private ArrayList<Cookware> cookwares;
-//    private ArrayList<Time> times;
 
     public Step(String description, float stepTime, String timeUnit,
                 Map<String, Map<String, Float>> ingredients, ArrayList<Cookware> cookwares) {
@@ -22,9 +20,7 @@ public class Step {
         this.timeUnit = timeUnit;
 
         this.ingredients = ingredients;
-//        this.times = times;
         this.cookwares = cookwares;
-//        this.times = new ArrayList<>();
     }
 
     public String getDescription() {

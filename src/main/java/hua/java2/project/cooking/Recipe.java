@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Recipe implements Info {
 
@@ -50,42 +51,83 @@ public class Recipe implements Info {
         readStep(f);
     }
 
-    public void printInfo(){
-        System.out.println("Yλικά: ");
+    public void printInfo(int numOfPeople){
+//        System.out.println("Yλικά: ");
+//        System.out.println();
+
+//        for (Map.Entry<String, Map<String, Float>> ingredientEntry : ingredients.entrySet()) {
+//            String ingredientName = ingredientEntry.getKey();
+//            System.out.println("Όνομα: " + ingredientName);
+//            System.out.println("Ποσότητα:");
+//            for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
+//                if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
+//                        measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
+//                    if(measurementEntry.getValue() != 0) {
+//                        System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
+//                    }
+//                } else {
+//                    float quantity = measurementEntry.getValue();
+//                    if(quantity != 0) {
+//                        if (quantity % 1 == 0) {
+//                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
+//                        } else {
+//                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
+//                        }
+//                    }
+//                }
+//            }
+//            System.out.println();
+//        }
+
+//        System.out.println();
+//
+//        System.out.println("Σκεύοι: ");
+//        System.out.println();
+
+//        for(Cookware ckwrs : cookwares){
+//            System.out.println(ckwrs.getName());
+//        }
+
+        System.out.println();
+        System.out.println("Υλικά: ");
         System.out.println();
 
-        for (Map.Entry<String, Map<String, Float>> ingredientEntry : ingredients.entrySet()) {
-            String ingredientName = ingredientEntry.getKey();
-            System.out.println("Όνομα: " + ingredientName);
-            System.out.println("Ποσότητα:");
-            for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
-                if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
-                        measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
-                    if(measurementEntry.getValue() != 0) {
-                        System.out.println(" - " + ms.convert(measurementEntry.getValue(), measurementEntry.getKey()));
-                    }
-                } else {
-                    float quantity = measurementEntry.getValue();
-                    if(quantity != 0) {
-                        if (quantity % 1 == 0) {
-                            System.out.println("  - " + (int) quantity + " " + measurementEntry.getKey());
+        for (Step stps : steps) {
+            // Print the basic details for each step
+            for (Map.Entry<String, Map<String, Float>> ingredientEntry : stps.getIngredients().entrySet()) {
+                String ingredientName = ingredientEntry.getKey();
+                System.out.println("Όνομα: " + ingredientName);
+                System.out.println("Ποσότητα:");
+                for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
+                    if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
+                            measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
+                        System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
+                    } else {
+                        float quantity = measurementEntry.getValue();
+                        if(quantity % 1 == 0) {
+                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
                         } else {
-                            System.out.println("  - " + quantity + " " + measurementEntry.getKey());
+                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
                         }
                     }
                 }
+                System.out.println();
             }
-            System.out.println();
         }
 
+        System.out.println("Σκέυοι:");
         System.out.println();
 
-        System.out.println("Σκεύοι: ");
-        System.out.println();
-
-        for(Cookware ckwrs : cookwares){
-            System.out.println(ckwrs.getName());
+        for (Step stps : steps) {
+            for (Cookware cwrs : stps.getCookwares()) {
+                System.out.println("Όνομα: " + cwrs.getName());
+                System.out.println();
+            }
+            System.out.println(); // Empty line for better readability
         }
+
+
+
         System.out.println();
 
         System.out.println("Συνολικός Χρόνος: ");
@@ -118,13 +160,13 @@ public class Recipe implements Info {
                 for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
                     if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
                             measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
-                        System.out.println(" - " + ms.convert(measurementEntry.getValue(), measurementEntry.getKey()));
+                        System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
                     } else {
                         float quantity = measurementEntry.getValue();
                         if(quantity % 1 == 0) {
-                            System.out.println("  - " + (int) quantity + " " + measurementEntry.getKey());
+                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
                         } else {
-                            System.out.println("  - " + quantity + " " + measurementEntry.getKey());
+                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
                         }
                     }
                 }
@@ -142,7 +184,6 @@ public class Recipe implements Info {
             System.out.println(); // Empty line for better readability
             counter++;
         }
-
     }
 
     public void readIngredient(String f) {
@@ -166,7 +207,7 @@ public class Recipe implements Info {
                 } else if (readingIngredient) {
                     if ((char) data == '{') {
 
-                        addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
+                        addIngredient(reader, ingredient);
 
                         readingIngredient = false;
 
@@ -179,7 +220,7 @@ public class Recipe implements Info {
                             if ((char) data == '{') {
                                 ingredient += ' ' + tmpIngredient;
 
-                                addIngredient(reader, (char) data, ingredient, quantity, unitMeasurment);
+                                addIngredient(reader, ingredient);
 
                                 readingIngredient = false;
 
@@ -215,7 +256,7 @@ public class Recipe implements Info {
                 }
             }
 
-            if(!ingredient.equals("")) {
+            if(!ingredient.isEmpty()) {
                 ShoppingList.addOrUpdateIngredient(ingredients, ingredient, "", 1);
             }
 
@@ -410,9 +451,15 @@ public class Recipe implements Info {
                     } else if (readingIngredient) {
                         if ((char) data == '{') {
 
+                            ////////////////////////
+//                            addIngredient(reader, ingredient);
+
                             singlestep += '{';
 
                             singlestep = addIngredient(reader, ingredient, tmpMeasurements, tmpIngredients, singlestep);
+
+                            ////////////////////
+
 
                             readingIngredient = false;
 
@@ -426,6 +473,9 @@ public class Recipe implements Info {
                                     ingredient += ' ' + tmpIngredient;
                                     singlestep += '{';
 
+                                    /////////////////////////////
+//                                    addIngredient(reader, ingredient);
+
                                     singlestep = addIngredient(reader, ingredient, tmpMeasurements, tmpIngredients, singlestep);
 
                                     readingIngredient = false;
@@ -433,6 +483,9 @@ public class Recipe implements Info {
                                     break;
 
                                 } else if ((char) data == '#' || (char) data == '~' || (char) data == '@' || (char) data == '.' || (char) data == ',') {
+
+                                    ///////////////////////////////////////
+//                                    ShoppingList.addOrUpdateIngredient(ingredients, ingredient, "", 1);
 
                                     singlestep += (char) data;
 
@@ -468,6 +521,9 @@ public class Recipe implements Info {
                             }
 
                         } else if ((char) data == '#' || (char) data == '~' || (char) data == '.' || (char) data == ',') {
+
+                            //////////////////////////////
+//                            ShoppingList.addOrUpdateIngredient(ingredients, ingredient, "", 1);
 
                             tmpMeasurements.put(unitMeasurment, (float) 1);
                             searchIngredient(ingredient, tmpIngredients, tmpMeasurements);
@@ -582,6 +638,11 @@ public class Recipe implements Info {
                 }
             }
 
+            if(!ingredient.isEmpty()) {
+                //////////////////////////////
+//                ShoppingList.addOrUpdateIngredient(ingredients, ingredient, "", 1);
+            }
+
             if (!cookware.isEmpty()) {
                 if (!cookwareExists(cookware, tmpCookwares)) {
                     tmpCookwares.add(new Cookware(cookware));
@@ -593,16 +654,17 @@ public class Recipe implements Info {
             }
 
         } catch (IOException e) {
-            System.out.println("error");
+            System.out.println("Εrror reading the file!\nTry again.");
         }
     }
 
 
-    private void addIngredient(FileReader reader, int data, String ingredient, float quantity, String unitMeasurment) throws IOException {
+    private void addIngredient(FileReader reader, String ingredient) throws IOException {
         String tmpQuantity = "";
         String tmpUnitMeasurment = "";
         boolean readingUnitMeasurment = false;
 
+        int data;
         while ((data = reader.read()) != -1 && (char) data != '}') {
             if ((char) data == '%') {
                 readingUnitMeasurment = true;
@@ -613,23 +675,25 @@ public class Recipe implements Info {
             }
         }
 
-        if(tmpQuantity.equals("")){
+        if(tmpQuantity.isEmpty()){
             tmpQuantity = "1";
         }
-        if(tmpUnitMeasurment.equals("")){
+        if(tmpUnitMeasurment.isEmpty()){
             tmpUnitMeasurment = "";
         }
 
-        quantity = Float.parseFloat(tmpQuantity);
-        unitMeasurment = tmpUnitMeasurment;
+        float quantity = Float.parseFloat(tmpQuantity);
+        String unitMeasurment = tmpUnitMeasurment;
 
         ShoppingList.addOrUpdateIngredient(ingredients, ingredient, unitMeasurment, quantity);
     }
 
     public void printRecipeInfo(String f) {
+        int numOfPeople = numOfPeople();
+
         readRecipe(f);
 
-        printInfo();
+        printInfo(numOfPeople);
     }
 
     private String searchIngredient(String ingredient, Map<String, Map<String, Float>> tmpIngredients, HashMap<String, Float> tmpMeasurements) {
@@ -671,20 +735,36 @@ public class Recipe implements Info {
 
         tmpStep += '}';
 
-        if(tmpQuantity.equals("")){
+        if(tmpQuantity.isEmpty()){
             tmpQuantity = "1";
         }
-        if(tmpUnitMeasurment.equals("")){
+        if(tmpUnitMeasurment.isEmpty()){
             tmpUnitMeasurment = "";
         }
 
         quantity = Float.parseFloat(tmpQuantity);
         unitMeasurment = tmpUnitMeasurment;
 
+        if(unitMeasurment.equals("gr") || unitMeasurment.equals("kg")){
+            quantity = MeasurementUnit.addGr(quantity, tmpUnitMeasurment);
+            unitMeasurment = "gr";
+        } else if(unitMeasurment.equals("ml") || unitMeasurment.equals("l")) {
+            quantity = MeasurementUnit.addMl(quantity, tmpUnitMeasurment);
+            unitMeasurment = "ml";
+        }
+
         tmpMeasurements.put(unitMeasurment, quantity);
         searchIngredient(ingredient, tmpIngredients, tmpMeasurements);
 
         return singleStep + tmpStep;
+    }
+
+    public static int numOfPeople() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Type the number of people you want to cook for.");
+
+        return scanner.nextInt();
     }
 
 }
