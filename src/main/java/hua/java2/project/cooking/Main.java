@@ -12,14 +12,14 @@ public class Main {
         } else if(args.length == 1 && !args[0].equals("-list")) {
             System.out.println();
 
-            //1η λειτουργια
+            //1η λειτουργια εκτυπωση πληροφοριων μιας συνταγης
 
             r.printRecipeInfo(args[0]);
 
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println();
 
-            //2η λειτουργια
+            //2η λειτουργια εκτυπωση λιστας αγορας
 
             sl.printShoppingList(args, args.length);
 

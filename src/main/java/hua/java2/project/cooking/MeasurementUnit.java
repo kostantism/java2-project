@@ -85,10 +85,6 @@ public class MeasurementUnit implements UnitConvertion{
         return ml + " ml";
     }
 
-    private String addNewUnit() {
-        return "";
-    }
-
     public static int addGr(float q, String name){
         int gr = 0;
 
