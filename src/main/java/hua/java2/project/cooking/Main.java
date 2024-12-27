@@ -23,18 +23,12 @@ public class Main {
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println();
 
-            frame.setTitle("Βοηθός Μάγειρας");
-            frame.setSize(500, 500);
-
             frame.printRecipeList(args, args.length);
-
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setVisible(true);
 
             //2η λειτουργια εκτυπωση λιστας αγορας
 
 //            sl.printShoppingList(args, args.length);
-            sl.printRecipeList(args, args.length);
+//            sl.printRecipeList(args, args.length);
 
         } else if(args[0].equals("-list")) {
             System.out.println("You should provide a recipe.");
