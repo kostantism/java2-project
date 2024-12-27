@@ -28,6 +28,8 @@ public class Time implements UnitConvertion{
         this.timeUnit = timeUnit;
     }
 
+    //μετατροπη μοναδας
+    @Override
     public String convert(float q, String name) {
 
         if(name.equals("minutes")) {
@@ -66,7 +68,7 @@ public class Time implements UnitConvertion{
         return minutes + " minutes";
     }
 
-    public static int addMinutes(int q, String name){
+    public int addMinutes(int q, String name){
         int minutes = 0;
 
         if(name.equals("hours")){

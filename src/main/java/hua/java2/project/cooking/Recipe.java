@@ -3,6 +3,7 @@ package hua.java2.project.cooking;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,6 @@ import java.util.Scanner;
 public class Recipe implements Info {
 
     Time t = new Time(0, "");
-    ShoppingList sl = new ShoppingList();
     MeasurementUnit ms = new MeasurementUnit("");
 
     private String name;
@@ -44,43 +44,15 @@ public class Recipe implements Info {
         this.totalTime = totalTime;
     }
 
-    //reads files
-    public void readRecipe(String f) {
-        readStep(f);
-    }
-
+    //εκτυπωνει τις πληροφοριες της συνταγης
     public void printInfo(int numOfPeople){
         System.out.println("\nYλικά συνταγής: \n");
 
-        for (Map.Entry<String, Map<String, Float>> ingredientEntry : ingredients.entrySet()) {
-            String ingredientName = ingredientEntry.getKey();
-            System.out.println("Όνομα: " + ingredientName);
-            System.out.println("Ποσότητα:");
-            for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
-                if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
-                        measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
-                    if(measurementEntry.getValue() != 0) {
-                        System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
-                    }
-                } else {
-                    float quantity = measurementEntry.getValue();
-                    if(quantity != 0) {
-                        if (quantity % 1 == 0) {
-                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
-                        } else {
-                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
-                        }
-                    }
-                }
-            }
-            System.out.println();
-        }
+        printIngredients(numOfPeople, ingredients);
 
         System.out.println("\nΣκεύοι συνταγής: \n");
 
-        for(Cookware ckwrs : cookwares){
-            System.out.println(ckwrs.getName());
-        }
+        printCookwares(cookwares);
 
         System.out.println("\nΣυνολικός Χρόνος συνταγής: \n");
 
@@ -88,50 +60,10 @@ public class Recipe implements Info {
 
         System.out.println("\nΑναλυτικά τα βήματα της συνταγής: \n");
 
-        int counter = 1;
-        for (Step stps : steps) {
-            // Print the basic details for each step
-            System.out.println(counter + ". " + stps.getDescription());
-            System.out.println();
-
-            if(stps.getStepTime() != 0) {
-                System.out.println("Χρόνος βήματος: " + t.convert(stps.getStepTime(), "minutes"));
-            }
-
-            System.out.println("\nΥλικά βήματος:\n");
-
-            for (Map.Entry<String, Map<String, Float>> ingredientEntry : stps.getIngredients().entrySet()) {
-                String ingredientName = ingredientEntry.getKey();
-                System.out.println("Όνομα: " + ingredientName);
-                System.out.println("Ποσότητα:");
-                for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
-                    if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
-                            measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
-                        System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
-                    } else {
-                        float quantity = measurementEntry.getValue();
-                        if(quantity % 1 == 0) {
-                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
-                        } else {
-                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
-                        }
-                    }
-                }
-                System.out.println();
-            }
-
-            System.out.println("Σκέυοι βήματος:\n");
-
-            for (Cookware cwrs : stps.getCookwares()) {
-                System.out.println("Όνομα: " + cwrs.getName());
-                System.out.println();
-            }
-
-            System.out.println();
-            counter++;
-        }
+        printSteps(numOfPeople);
     }
 
+    //αναζητηση αν υπαρχει ηδη το σκευος
     private boolean cookwareExists(String cookware, ArrayList<Cookware> cookwares) {
         for (Cookware ckwr : cookwares) {
             if (ckwr.getName().equals(cookware)) {
@@ -141,10 +73,14 @@ public class Recipe implements Info {
         return false;
     }
 
-    public void readStep(String f) {
+    //διαβαζει το αρχειο με την συνταγη και αποθηκευει βηματα, υλικα με ποσοτητες, σκεοι κα χρονο
+    public void readRecipe(String f) {
         File file = new File(f);
+        FileReader reader = null;
 
-        try (FileReader reader = new FileReader(file)) {
+        try {
+            reader = new FileReader(file);
+
             int data;
             boolean isNewline = false;
             String singlestep = "";
@@ -171,6 +107,7 @@ public class Recipe implements Info {
             while ((data = reader.read()) != -1) {
                 char currentChar = (char) data;
 
+                //τελος βηματος
                 if ((currentChar == '\n' || currentChar == '\r') && (reader.read() == '\n' || reader.read() == '\r')) {
                     if (isNewline) {
 
@@ -190,10 +127,12 @@ public class Recipe implements Info {
 
                     boolean found = false;
 
+                    //βρηκε χρονο
                     if (currentChar == '~' && reader.read() == '{') {
                         found = true;
                         readingTime = true;
 
+                        //μετατροπη σε λεπτα
                         if (tmpTimeUnit.equals("minutes")) {
                             totalTime += Float.parseFloat(tmpTime);
                         } else if (tmpTimeUnit.equals("hours")) {
@@ -203,12 +142,15 @@ public class Recipe implements Info {
                         tmpTime = "";
                         tmpTimeUnit = "";
 
+                    //διαβαζει χρονο
                     } else if (readingTime) {
 
+                        //βρηκε μοναδα χρονου
                         if (currentChar == '%') {
 
                             readingTimeUnit = true;
 
+                        //διαβαζει μοναδα χρονου
                         } else if (readingTimeUnit) {
 
                             if (currentChar == '}') {
@@ -216,6 +158,7 @@ public class Recipe implements Info {
                                 readingTime = false;
                                 timeUnit = tmpTimeUnit;
 
+                                //μετατροπη σε λεπτα
                                 if (timeUnit.equals("minutes")) {
                                     time += Float.parseFloat(tmpTime);
                                 } else if (timeUnit.equals("hours")) {
@@ -230,12 +173,14 @@ public class Recipe implements Info {
                             tmpTime += currentChar;
                         }
 
+                    //βρηκε υλικο
                     } else if ((char) data == '@') {
                         readingIngredient = true;
                         ingredient = "";
                         quantity = 0;
                         unitMeasurment = "";
 
+                    //διαβαζει υλικο
                     } else if (readingIngredient) {
                         if ((char) data == '{') {
 
@@ -245,11 +190,13 @@ public class Recipe implements Info {
 
                             readingIngredient = false;
 
+                        //βρηκε κενο οσο διαβαζε υλικο
                         } else if ((char) data == ' ') {
                             String tmpIngredient = "";
 
                             singlestep += ' ';
 
+                            //ξεκιναει να διαβαζει υλικο σε περιπτωση που βρει { για υλικο με πανω απο μια λεξη
                             while ((data = reader.read()) != -1) {
                                 if ((char) data == '{') {
                                     ingredient += ' ' + tmpIngredient;
@@ -261,6 +208,7 @@ public class Recipe implements Info {
 
                                     break;
 
+                                    //βρηκε αλλο συμβολο οποτε το υλικο εχει μια λεξη χωρις ποσοτητα
                                 } else if ((char) data == '#' || (char) data == '~' || (char) data == '@' || (char) data == '.' || (char) data == ',') {
 
                                     ShoppingList.addOrUpdateIngredient(ingredients, ingredient, "", quantity);
@@ -298,6 +246,7 @@ public class Recipe implements Info {
                                 }
                             }
 
+                        //βρηκε σκευος, χρονο η αλλο συμβολο
                         } else if ((char) data == '#' || (char) data == '~' || (char) data == '.' || (char) data == ',') {
 
                             ShoppingList.addOrUpdateIngredient(ingredients, ingredient, "", quantity);
@@ -311,10 +260,12 @@ public class Recipe implements Info {
                             ingredient += (char) data;
                         }
 
+                    //βρηκε σκευος
                     } else if (currentChar == '#') {
                         cookware = "";
                         readingckwr = true;
 
+                    //διαβαζει σκευος
                     } else if (readingckwr) {
                         if (currentChar == '{') {
 
@@ -329,11 +280,13 @@ public class Recipe implements Info {
                             }
                             readingckwr = false;
 
+                        //βρηκε κενο οσο διαβαζε σκευος
                         } else if (currentChar == ' ' ) {
                             String tmpCookware = "";
 
                             singlestep += ' ';
 
+                            //ξεκιναει να διαβαζει σκευος σε περιπτωση που βρει { για σκευος με πανω απο μια λεξη
                             while ((data = reader.read()) != -1) {
                                 currentChar = (char) data;
 
@@ -358,6 +311,7 @@ public class Recipe implements Info {
                                     readingckwr = false;
                                     break;
 
+                                    //βρηκε αλλο συμβολο
                                 } else if (currentChar == '@' || currentChar == '~' || currentChar== '.' || currentChar == ',' || currentChar == '#') {
 
                                     singlestep += tmpCookware;
@@ -397,6 +351,7 @@ public class Recipe implements Info {
 
                             }
 
+                        //βρηκε χρονο η αλλο συμβολο
                         } else if (currentChar == '.' || currentChar == ',' || currentChar == '~') {
                             if (!cookwareExists(cookware, tmpCookwares)) {
                                 tmpCookwares.add(new Cookware(cookware));
@@ -424,6 +379,7 @@ public class Recipe implements Info {
                 }
             }
 
+            //σε περιπτωση που στο τελος υπαρχει χρονος χωρις συμβολο ωστε να γινει αποθηκευση
             if (!tmpTime.isEmpty()) {
                 if (tmpTimeUnit.equals("minutes")) {
                     totalTime += Float.parseFloat(tmpTime);
@@ -432,12 +388,15 @@ public class Recipe implements Info {
                 }
             }
 
+            //σε περιπτωση που στο τελος υπαρχει υλικο χωρις συμβολο ωστε να γινει αποθηκευση
             if(!ingredient.isEmpty()) {
                 ShoppingList.addOrUpdateIngredient(ingredients, ingredient, "", 1);
                 tmpMeasurements.put(unitMeasurment, (float) 1);
                 searchIngredient(ingredient, tmpIngredients, tmpMeasurements);
+                tmpIngredients = new HashMap<>();
             }
 
+            //σε περιπτωση που στο τελος υπαρχει σκευος χωρις συμβολο ωστε να γινει αποθηκευση
             if (!cookware.isEmpty()) {
                 if (!cookwareExists(cookware, tmpCookwares)) {
                     tmpCookwares.add(new Cookware(cookware));
@@ -448,15 +407,20 @@ public class Recipe implements Info {
                 }
             }
 
+            //σε περιπτωση που στο τελευταιο βημα δεν υπαρχει συμβολο ωστε να γινει αποθηκευση
             if (!singlestep.isEmpty()) {
                 steps.add(new Step(singlestep, time, timeUnit, tmpIngredients, tmpCookwares));
             }
 
         } catch (IOException e) {
-            System.out.println("Εrror reading the file!\nTry again.");
+            System.out.println("Error reading the file!\nTry again.");
+        }
+        finally {
+            closeQuietly(reader);
         }
     }
 
+    //διαβαζει την συνταγη και εκτυπωνει τις πληροφοριες της
     public void printRecipeInfo(String f) {
         int numOfPeople = numOfPeople();
 
@@ -465,12 +429,12 @@ public class Recipe implements Info {
         printInfo(numOfPeople);
     }
 
+    //αναζητηση αν υπαρχει το υλικο
     private String searchIngredient(String ingredient, Map<String, Map<String, Float>> tmpIngredients, HashMap<String, Float> tmpMeasurements) {
         for (Map.Entry<String, Map<String, Float>> ingredientEntry : ingredients.entrySet()) {
             String ingredientName = ingredientEntry.getKey();
 
             if (ingredientName.equals(ingredient)) {
-                // Add the found ingredient and its values to tmpIngredients
                 tmpIngredients.put(ingredientName, tmpMeasurements);
                 return ingredientName;
             }
@@ -479,6 +443,7 @@ public class Recipe implements Info {
         return "notFound";
     }
 
+    //διαβαζει ποσοτητα και μοναδα μετρησης και αποθηκευει το υλικο
     private String addIngredient(FileReader reader, String ingredient, HashMap<String, Float> tmpMeasurements,
                                Map<String, Map<String, Float>> tmpIngredients, String singleStep) throws IOException {
         String tmpQuantity = "";
@@ -514,28 +479,98 @@ public class Recipe implements Info {
         quantity = Float.parseFloat(tmpQuantity);
         unitMeasurment = tmpUnitMeasurment;
 
+        //αποθηκευει το υλικο στον πινακα με ολα τα υλικα της συνταγης
         ShoppingList.addOrUpdateIngredient(ingredients, ingredient, unitMeasurment, quantity);
 
         if(unitMeasurment.equals("gr") || unitMeasurment.equals("kg")){
-            quantity = MeasurementUnit.addGr(quantity, tmpUnitMeasurment);
+            quantity = ms.addGr(quantity, tmpUnitMeasurment);
             unitMeasurment = "gr";
         } else if(unitMeasurment.equals("ml") || unitMeasurment.equals("l")) {
-            quantity = MeasurementUnit.addMl(quantity, tmpUnitMeasurment);
+            quantity = ms.addMl(quantity, tmpUnitMeasurment);
             unitMeasurment = "ml";
         }
 
+        //αποθηκευει τα υλικα στο μαπ για τα υλικα του καθε βηματος
         tmpMeasurements.put(unitMeasurment, quantity);
         searchIngredient(ingredient, tmpIngredients, tmpMeasurements);
 
         return singleStep + tmpStep;
     }
 
-    public static int numOfPeople() {
+    //διαβαζει το πληθος των ατομων
+    public int numOfPeople() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Type the number of people you want to cook for.");
+        System.out.println("Γράψτε το πλήθος των ατόμων για τα οποία θέλετε να μαγειρέψετε.");
 
         return scanner.nextInt();
+    }
+
+    //κλεινει το αρχειο
+    public void closeQuietly(Reader reader) {
+        try {
+            if(reader != null) {
+                reader.close();
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to close the file");
+        }
+    }
+
+    public void printIngredients(int numOfPeople, Map<String, Map<String, Float>> ingredients) {
+        for (Map.Entry<String, Map<String, Float>> ingredientEntry : ingredients.entrySet()) {
+            String ingredientName = ingredientEntry.getKey();
+            System.out.println("Όνομα: " + ingredientName);
+            System.out.println("Ποσότητα:");
+            for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
+                if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
+                        measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
+                    if(measurementEntry.getValue() != 0) {
+                        System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
+                    }
+                } else {
+                    float quantity = measurementEntry.getValue();
+                    if(quantity != 0) {
+                        if (quantity % 1 == 0) {
+                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
+                        } else {
+                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
+                        }
+                    }
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    private void printSteps(int numOfPeople) {
+        int counter = 1;
+        for (Step stps : steps) {
+            System.out.println(counter + ". " + stps.getDescription());
+            System.out.println();
+
+            if(stps.getStepTime() != 0) {
+                System.out.println("Χρόνος βήματος: " + t.convert(stps.getStepTime(), "minutes"));
+            }
+
+            System.out.println("\nΥλικά βήματος:\n");
+
+            printIngredients(numOfPeople, stps.getIngredients());
+
+            System.out.println("Σκέυοι βήματος:\n");
+
+            printCookwares(stps.getCookwares());
+
+            System.out.println();
+            counter++;
+        }
+    }
+
+    private void printCookwares(ArrayList<Cookware> cookwares) {
+        for (Cookware cwrs : cookwares) {
+            System.out.println("Όνομα: " + cwrs.getName());
+            System.out.println();
+        }
     }
 
 }

@@ -16,6 +16,7 @@ public class MeasurementUnit implements UnitConvertion{
         this.name = name;
     }
 
+    //μετατροπη μοναδας
     @Override
     public String convert(float q, String name) {
 
@@ -85,7 +86,7 @@ public class MeasurementUnit implements UnitConvertion{
         return ml + " ml";
     }
 
-    public static int addGr(float q, String name){
+    public int addGr(float q, String name){
         int gr = 0;
 
         if(name.equals("kg")){
@@ -96,7 +97,7 @@ public class MeasurementUnit implements UnitConvertion{
         return gr;
     }
 
-    public static int addMl(float q, String name){
+    public int addMl(float q, String name){
         int ml = 0;
 
         if(name.equals("l")){
