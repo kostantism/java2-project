@@ -21,7 +21,7 @@ public class ShoppingList implements Info {
     public void printInfo(int numOfPeople) {
         System.out.println("Λίστα αγορών:");
         System.out.println();
-        r.printIngredients(numOfPeople, ingredients);
+//        r.printIngredients(numOfPeople, ingredients);
     }
 
     //διαβαζει το αρχειο και αποθηκευει τα υλικα με τις ποσοτητες τους

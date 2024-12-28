@@ -20,7 +20,7 @@ public class Frame extends JFrame {
         super();
 
         this.setTitle("Βοηθός Μάγειρας");
-        this.setSize(500, 500);
+        this.setSize(1400, 800);
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));

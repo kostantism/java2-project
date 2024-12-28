@@ -1,6 +1,7 @@
 package hua.java2.project.cooking;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
@@ -10,9 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
 
-public class Recipe implements Info {
+public class Recipe {///////////////////////////////implements info
 
     Time t = new Time(0, "");
     MeasurementUnit ms = new MeasurementUnit("");
@@ -22,8 +22,6 @@ public class Recipe implements Info {
     private ArrayList<Cookware> cookwares;
     private ArrayList<Step> steps;
     private float totalTime;
-
-    private int numOfPeople;
 
     public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Cookware> cookwares, ArrayList<Step> steps, float totalTime) {
         this.name = name;
@@ -50,54 +48,80 @@ public class Recipe implements Info {
     }
 
     //εκτυπωνει τις πληροφοριες της συνταγης
-    public void printInfo(int numOfPeople){
-        System.out.println("\nYλικά συνταγής: \n");
+//    public void printInfo(int numOfPeople){
+//        System.out.println("\nYλικά συνταγής: \n");
+//
+//        printIngredients(numOfPeople, ingredients);
+//
+//        System.out.println("\nΣκεύοι συνταγής: \n");
+//
+//        printCookwares(cookwares);
+//
+//        System.out.println("\nΣυνολικός Χρόνος συνταγής: \n");
+//
+//        System.out.println(t.convert(totalTime, "minutes"));
+//
+//        System.out.println("\nΑναλυτικά τα βήματα της συνταγής: \n");
+//
+//        printSteps(numOfPeople);
+//    }
 
-        printIngredients(numOfPeople, ingredients);
+    public void printInfoFrame(int numOfPeople, Frame frame, JPanel mainPanel){
+        mainPanel.removeAll();
 
-        System.out.println("\nΣκεύοι συνταγής: \n");
+        mainPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
 
-        printCookwares(cookwares);
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
 
-        System.out.println("\nΣυνολικός Χρόνος συνταγής: \n");
+        // Ορίζουμε την κάθετη και οριζόντια μπάρα scrolling, αν χρειάζεται
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Πάντα ενεργή η κάθετη μπάρα
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); // Οριζόντια μπάρα μόνο αν χρειάζεται
 
-        System.out.println(t.convert(totalTime, "minutes"));
-
-        System.out.println("\nΑναλυτικά τα βήματα της συνταγής: \n");
-
-        printSteps(numOfPeople);
-    }
-
-    public void printInfoFrame(int numOfPeople, JPanel mainPanel){
         JLabel label;
 
         label = new JLabel("Yλικά συνταγής: ", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(label);
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        printIngredients(numOfPeople, ingredients, mainPanel);
 
         label = new JLabel("Σκεύοι συνταγής: ", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(label);
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        printCookwares(cookwares, mainPanel);
 
         label = new JLabel("Συνολικός Χρόνος συνταγής: ", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(label);
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        System.out.println(t.convert(totalTime, "minutes"));
 
         label = new JLabel("Αναλυτικά τα βήματα της συνταγής: ", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(label);
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        printSteps(numOfPeople, mainPanel);
+
+        // Προσθήκη του JScrollPane στο frame (ή container)
+        // Παράδειγμα: Αν έχετε ένα JFrame ή άλλο container, προσθέστε το scrollPane σε αυτό
+        frame.getContentPane().add(scrollPane);
+
+        // Ανανεώστε το panel και frame για να εμφανιστούν οι αλλαγές
+        frame.revalidate();
+        frame.repaint();
     }
 
     //αναζητηση αν υπαρχει ηδη το σκευος
@@ -459,18 +483,12 @@ public class Recipe implements Info {
 
     //διαβαζει την συνταγη και εκτυπωνει τις πληροφοριες της
     public void printRecipeInfo(String f, Frame frame, JPanel mainPanel) {
-//        int numOfPeople = numOfPeople();
-//        showNumOfPeoplePanel(frame, mainPanel);
-
-//        int numOfPeople = getNumOfPeople(frame, mainPanel);
-//        int numOfPeople = showNumOfPeoplePanel(frame, mainPanel);
         int numOfPeople = showNumOfPeopleDialog(frame);
 
         readRecipe(f);
 
-        printInfo(numOfPeople);
-
-
+//        printInfo(numOfPeople);
+        printInfoFrame(numOfPeople, frame, mainPanel);
     }
 
 
@@ -662,12 +680,6 @@ public class Recipe implements Info {
         return numOfPeople[0];
     }
 
-
-//    public int getNumOfPeople(Frame frame, JPanel mainPanel) {
-//        showNumOfPeoplePanel(frame, mainPanel);
-//
-//        return numOfPeople;
-//    }
     /////////////////////////////////////////////////////////
 
     //κλεινει το αρχειο
@@ -681,61 +693,181 @@ public class Recipe implements Info {
         }
     }
 
-    public void printIngredients(int numOfPeople, Map<String, Map<String, Float>> ingredients) {
+//    public void printIngredients(int numOfPeople, Map<String, Map<String, Float>> ingredients) {
+//        for (Map.Entry<String, Map<String, Float>> ingredientEntry : ingredients.entrySet()) {
+//            String ingredientName = ingredientEntry.getKey();
+//            System.out.println("Όνομα: " + ingredientName);
+//            System.out.println("Ποσότητα:");
+//            for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
+//                if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
+//                        measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
+//                    if(measurementEntry.getValue() != 0) {
+//                        System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
+//                    }
+//                } else {
+//                    float quantity = measurementEntry.getValue();
+//                    if(quantity != 0) {
+//                        if (quantity % 1 == 0) {
+//                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
+//                        } else {
+//                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
+//                        }
+//                    }
+//                }
+//            }
+//            System.out.println();
+//        }
+//    }
+
+    public void printIngredients(int numOfPeople, Map<String, Map<String, Float>> ingredients, JPanel mainPanel) {
+        // Δημιουργία JPanel για κάθε συστατικό
         for (Map.Entry<String, Map<String, Float>> ingredientEntry : ingredients.entrySet()) {
             String ingredientName = ingredientEntry.getKey();
-            System.out.println("Όνομα: " + ingredientName);
-            System.out.println("Ποσότητα:");
+
+            // Δημιουργία JLabel για το όνομα του συστατικού
+            JLabel ingredientLabel = new JLabel("Όνομα: " + ingredientName);
+            ingredientLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            ingredientLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            mainPanel.add(ingredientLabel);
+
+            // Δημιουργία JLabel για την ποσότητα
+            JLabel quantityLabel = new JLabel("Ποσότητα:");
+            quantityLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            quantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            mainPanel.add(quantityLabel);
+
+            // Προσθήκη τιμών μέτρησης
             for (Map.Entry<String, Float> measurementEntry : ingredientEntry.getValue().entrySet()) {
-                if(measurementEntry.getKey().equals("gr") || measurementEntry.getKey().equals("kg") ||
-                        measurementEntry.getKey().equals("ml") || measurementEntry.getKey().equals("l")) {
-                    if(measurementEntry.getValue() != 0) {
-                        System.out.println(" - " + ms.convert(measurementEntry.getValue() * numOfPeople, measurementEntry.getKey()));
+                String unit = measurementEntry.getKey();
+                float quantity = measurementEntry.getValue() * numOfPeople;
+
+                if (quantity != 0) {
+                    String displayQuantity;
+
+                    // Έλεγχος για μονάδες μέτρησης
+                    if (unit.equals("gr") || unit.equals("kg") || unit.equals("ml") || unit.equals("l")) {
+                        displayQuantity = ms.convert(quantity, unit);
+                    } else if (quantity % 1 == 0) {
+                        displayQuantity = (int) quantity + " " + unit;
+                    } else {
+                        displayQuantity = quantity + " " + unit;
                     }
-                } else {
-                    float quantity = measurementEntry.getValue();
-                    if(quantity != 0) {
-                        if (quantity % 1 == 0) {
-                            System.out.println("  - " + (int) quantity * numOfPeople + " " + measurementEntry.getKey());
-                        } else {
-                            System.out.println("  - " + quantity * numOfPeople + " " + measurementEntry.getKey());
-                        }
-                    }
+
+                    // Δημιουργία JLabel για κάθε μονάδα
+                    JLabel unitLabel = new JLabel(" - " + displayQuantity);
+                    unitLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+                    unitLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    mainPanel.add(unitLabel);
                 }
             }
-            System.out.println();
+
+            // Προσθήκη απόστασης μετά από κάθε συστατικό
+            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
+
+        // Επανασχεδιασμός του mainPanel
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 
-    private void printSteps(int numOfPeople) {
-        int counter = 1;
-        for (Step stps : steps) {
-            System.out.println(counter + ". " + stps.getDescription());
-            System.out.println();
+//    private void printSteps(int numOfPeople, JPanel mainPanel) {
+//        int counter = 1;
+//        for (Step stps : steps) {
+//            System.out.println(counter + ". " + stps.getDescription());
+//            System.out.println();
+//
+//            if(stps.getStepTime() != 0) {
+//                System.out.println("Χρόνος βήματος: " + t.convert(stps.getStepTime(), "minutes"));
+//            }
+//
+//            System.out.println("\nΥλικά βήματος:\n");
+//
+//            printIngredients(numOfPeople, stps.getIngredients(), mainPanel);
+//
+//            System.out.println("Σκέυοι βήματος:\n");
+//
+//            printCookwares(stps.getCookwares(), mainPanel);
+//
+//            System.out.println();
+//            counter++;
+//        }
+//    }
 
-            if(stps.getStepTime() != 0) {
-                System.out.println("Χρόνος βήματος: " + t.convert(stps.getStepTime(), "minutes"));
+    private void printSteps(int numOfPeople, JPanel mainPanel) {
+        int counter = 1;
+
+        // Επεξεργασία κάθε βήματος
+        for (Step stps : steps) {
+            // Δημιουργία JLabel για την περιγραφή του βήματος
+            JLabel stepLabel = new JLabel(counter + ". " + stps.getDescription());
+            stepLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            stepLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            mainPanel.add(stepLabel);
+
+            // Αν υπάρχει χρόνος βήματος, τον εμφανίζουμε
+            if (stps.getStepTime() != 0) {
+                JLabel timeLabel = new JLabel("Χρόνος βήματος: " + t.convert(stps.getStepTime(), "minutes"));
+                timeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+                timeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                mainPanel.add(timeLabel);
             }
 
-            System.out.println("\nΥλικά βήματος:\n");
+            // Προσθήκη απόστασης μεταξύ των βημάτων
+            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-            printIngredients(numOfPeople, stps.getIngredients());
+            // Εμφάνιση των υλικών του βήματος
+            JLabel ingredientsLabel = new JLabel("\nΥλικά βήματος:");
+            ingredientsLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            ingredientsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            mainPanel.add(ingredientsLabel);
 
-            System.out.println("Σκέυοι βήματος:\n");
+            printIngredients(numOfPeople, stps.getIngredients(), mainPanel);
 
-            printCookwares(stps.getCookwares());
+            // Εμφάνιση των σκευών του βήματος
+            JLabel cookwareLabel = new JLabel("\nΣκεύη βήματος:");
+            cookwareLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            cookwareLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            mainPanel.add(cookwareLabel);
 
-            System.out.println();
+            printCookwares(stps.getCookwares(), mainPanel);
+
+            // Προσθήκη απόστασης μεταξύ των βημάτων
+            mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
             counter++;
         }
+
+        // Επανασχεδιασμός του mainPanel για να εμφανιστούν οι αλλαγές
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 
-    private void printCookwares(ArrayList<Cookware> cookwares) {
+
+//    private void printCookwares(ArrayList<Cookware> cookwares) {
+//        for (Cookware cwrs : cookwares) {
+//            System.out.println("Όνομα: " + cwrs.getName());
+//            System.out.println();
+//        }
+//    }
+
+    private void printCookwares(ArrayList<Cookware> cookwares, JPanel mainPanel) {
+        // Προσθήκη κάθε σκεύους στη λίστα
         for (Cookware cwrs : cookwares) {
-            System.out.println("Όνομα: " + cwrs.getName());
-            System.out.println();
+            // Δημιουργία JLabel για το όνομα του σκεύους
+            JLabel cookwareLabel = new JLabel("Όνομα: " + cwrs.getName());
+            cookwareLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            cookwareLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            mainPanel.add(cookwareLabel);
+
+            // Προσθήκη απόστασης μετά από κάθε σκεύος
+            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
+
+        // Επανασχεδιασμός του mainPanel
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
+
 
 }
 
