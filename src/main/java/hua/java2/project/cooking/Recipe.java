@@ -104,7 +104,14 @@ public class Recipe {///////////////////////////////implements info
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        System.out.println(t.convert(totalTime, "minutes"));
+//        System.out.println(t.convert(totalTime, "minutes"));
+
+        JLabel timeLabel = new JLabel(t.convert(totalTime, "minutes"));
+        timeLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        timeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(timeLabel);
+
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         label = new JLabel("Αναλυτικά τα βήματα της συνταγής: ", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 20));
