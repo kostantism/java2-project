@@ -129,7 +129,7 @@ public class Frame extends JFrame {
                     if(selectedOption != null) {
 //                        JOptionPane.showMessageDialog(Frame.this, "Επιλέξατε τη: " + selectedOption);
                         if(selectedOption.equals("Εμφάνιση Συνταγής")) {
-                            r.printRecipeInfo(selectedRecipe);
+                            r.printRecipeInfo(selectedRecipe, Frame.this, mainPanel);
 
                         } else if(selectedOption.equals("Παραγωγή Λίστας Αγορών")) {
 

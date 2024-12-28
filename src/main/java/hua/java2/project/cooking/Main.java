@@ -18,7 +18,7 @@ public class Main {
 
             //1η λειτουργια εκτυπωση πληροφοριων μιας συνταγης
 
-            r.printRecipeInfo(args[0]);
+//            r.printRecipeInfo(args[0]);
 
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println();

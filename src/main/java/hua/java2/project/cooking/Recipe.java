@@ -1,5 +1,7 @@
 package hua.java2.project.cooking;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 
 public class Recipe implements Info {
 
@@ -19,6 +22,8 @@ public class Recipe implements Info {
     private ArrayList<Cookware> cookwares;
     private ArrayList<Step> steps;
     private float totalTime;
+
+    private int numOfPeople;
 
     public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Cookware> cookwares, ArrayList<Step> steps, float totalTime) {
         this.name = name;
@@ -61,6 +66,38 @@ public class Recipe implements Info {
         System.out.println("\nΑναλυτικά τα βήματα της συνταγής: \n");
 
         printSteps(numOfPeople);
+    }
+
+    public void printInfoFrame(int numOfPeople, JPanel mainPanel){
+        JLabel label;
+
+        label = new JLabel("Yλικά συνταγής: ", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(label);
+
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        label = new JLabel("Σκεύοι συνταγής: ", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(label);
+
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        label = new JLabel("Συνολικός Χρόνος συνταγής: ", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(label);
+
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        label = new JLabel("Αναλυτικά τα βήματα της συνταγής: ", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(label);
+
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
     }
 
     //αναζητηση αν υπαρχει ηδη το σκευος
@@ -421,13 +458,22 @@ public class Recipe implements Info {
     }
 
     //διαβαζει την συνταγη και εκτυπωνει τις πληροφοριες της
-    public void printRecipeInfo(String f) {
-        int numOfPeople = numOfPeople();
+    public void printRecipeInfo(String f, Frame frame, JPanel mainPanel) {
+//        int numOfPeople = numOfPeople();
+//        showNumOfPeoplePanel(frame, mainPanel);
+
+//        int numOfPeople = getNumOfPeople(frame, mainPanel);
+//        int numOfPeople = showNumOfPeoplePanel(frame, mainPanel);
+        int numOfPeople = showNumOfPeopleDialog(frame);
 
         readRecipe(f);
 
         printInfo(numOfPeople);
+
+
     }
+
+
 
     //αναζητηση αν υπαρχει το υλικο
     private String searchIngredient(String ingredient, Map<String, Map<String, Float>> tmpIngredients, HashMap<String, Float> tmpMeasurements) {
@@ -505,6 +551,124 @@ public class Recipe implements Info {
 
         return scanner.nextInt();
     }
+
+    //////////////////////////////////////////////////////////
+//    public int showNumOfPeoplePanel(Frame frame, JPanel mainPanel) {
+//        CountDownLatch latch = new CountDownLatch(1);
+//
+//
+//        // Καθαρισμός του mainPanel
+//        mainPanel.removeAll();
+//
+//        // Δημιουργία του JLabel για το μήνυμα
+//        JLabel messageLabel = new JLabel("Γράψτε το πλήθος των ατόμων για τα οποία θέλετε να μαγειρέψετε:");
+//        messageLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+//        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        mainPanel.add(messageLabel);
+//
+//        // Προσθήκη απόστασης
+//        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//
+//        // Δημιουργία JTextField για την εισαγωγή του αριθμού
+//        JTextField inputField = new JTextField();
+//        inputField.setMaximumSize(new Dimension(200, 30)); // Μέγιστο μέγεθος του πεδίου
+//        inputField.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        mainPanel.add(inputField);
+//
+//        // Προσθήκη απόστασης
+//        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//
+//        // Δημιουργία JButton για την επιβεβαίωση
+//        JButton submitButton = new JButton("Επιβεβαίωση");
+//        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        mainPanel.add(submitButton);
+//
+//
+//        // Ακροατής για το κουμπί
+//        submitButton.addActionListener(e -> {
+//            try {
+//                numOfPeople = Integer.parseInt(inputField.getText());
+//                JOptionPane.showMessageDialog(frame, "Πλήθος ατόμων: " + numOfPeople);
+//                latch.countDown();
+//
+//                // Εδώ μπορείς να συνεχίσεις με άλλες λειτουργίες, π.χ., αλλαγή του mainPanel
+//            } catch (NumberFormatException ex) {
+//                JOptionPane.showMessageDialog(frame, "Παρακαλώ εισάγετε έναν έγκυρο αριθμό!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+//            }
+//
+//        });
+//
+//        // Επανασχεδιασμός του mainPanel
+//        mainPanel.revalidate();
+//        mainPanel.repaint();
+//
+////        try {
+////            latch.await(); // Περιμένει μέχρι να καλέσει κάποιος το `latch.countDown()`
+////        } catch (InterruptedException ex) {
+////            ex.printStackTrace();
+////        }
+//
+//        return numOfPeople;
+//
+//    }
+
+    public int showNumOfPeopleDialog(Frame frame) {
+        // Δημιουργία JDialog
+        JDialog dialog = new JDialog(frame, "Πλήθος Ατόμων", true);
+        dialog.setSize(300, 200);
+        dialog.setLayout(new BoxLayout(dialog.getContentPane(), BoxLayout.Y_AXIS));
+
+        // Δημιουργία μηνύματος
+        JLabel messageLabel = new JLabel("Γράψτε το πλήθος των ατόμων για τα οποία θέλετε να μαγειρέψετε:");
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(messageLabel);
+
+        // Προσθήκη απόστασης
+        dialog.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Δημιουργία JTextField
+        JTextField inputField = new JTextField();
+        inputField.setMaximumSize(new Dimension(200, 30));
+        inputField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(inputField);
+
+        // Προσθήκη απόστασης
+        dialog.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Δημιουργία JButton
+        JButton submitButton = new JButton("Επιβεβαίωση");
+        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(submitButton);
+
+        // Αποθήκευση του αριθμού
+        final int[] numOfPeople = {0};
+
+        // Ακροατής για το κουμπί
+        submitButton.addActionListener(e -> {
+            try {
+                numOfPeople[0] = Integer.parseInt(inputField.getText());
+                dialog.dispose(); // Κλείσιμο του διαλόγου
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Παρακαλώ εισάγετε έναν έγκυρο αριθμό!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        // Εμφάνιση του διαλόγου
+        dialog.setLocationRelativeTo(frame);
+        dialog.setVisible(true);
+
+        // Επιστροφή του αριθμού
+        return numOfPeople[0];
+    }
+
+
+//    public int getNumOfPeople(Frame frame, JPanel mainPanel) {
+//        showNumOfPeoplePanel(frame, mainPanel);
+//
+//        return numOfPeople;
+//    }
+    /////////////////////////////////////////////////////////
 
     //κλεινει το αρχειο
     public void closeQuietly(Reader reader) {
