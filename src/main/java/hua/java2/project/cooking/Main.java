@@ -16,7 +16,7 @@ public class Main {
 
             String[] recipes = frame.getRecipes(frame).toArray(new String[0]);
 
-            frame.printRecipeList(recipes);
+            frame.printRecipeList(0, recipes);
 
 //            for (String recipe : recipes) {
 //                System.out.println("Όνομα: " + recipe);
@@ -26,6 +26,8 @@ public class Main {
         } else if(args.length == 1 && !args[0].equals("-list")) {
             System.out.println();
 
+            frame.showSelectedRecipe(args[0]);
+
             //1η λειτουργια εκτυπωση πληροφοριων μιας συνταγης
 
 //            r.printRecipeInfo(args[0]);
@@ -33,7 +35,7 @@ public class Main {
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println();
 
-            frame.printRecipeList(args);
+            frame.printRecipeList(1, args);
 
             //2η λειτουργια εκτυπωση λιστας αγορας
 

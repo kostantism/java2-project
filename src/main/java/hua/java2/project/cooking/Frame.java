@@ -88,15 +88,15 @@ public class Frame extends JFrame {
 
     }
 
-    public void printRecipeList(String[] args) {
+    public void printRecipeList(int start, String[] args) {
         DefaultListModel<String> model = new DefaultListModel<>();
-        for (int i = 0; i < args.length; i++) {
+        for (int i = start; i < args.length; i++) {
             model.addElement(args[i]);
         }
         list.setModel(model);
     }
 
-    private void showSelectedRecipe(String selectedRecipe) {
+    public void showSelectedRecipe(String selectedRecipe) {
         mainPanel.removeAll();
 
         titleLabel = new JLabel("Επιλογές Συνταγής: " + selectedRecipe, SwingConstants.CENTER);
