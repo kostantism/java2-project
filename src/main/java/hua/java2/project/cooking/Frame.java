@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class Frame extends JFrame {
 
@@ -87,9 +88,9 @@ public class Frame extends JFrame {
 
     }
 
-    public void printRecipeList(String[] args, int argsLength) {
+    public void printRecipeList(String[] args) {
         DefaultListModel<String> model = new DefaultListModel<>();
-        for (int i = 1; i < argsLength; i++) {
+        for (int i = 0; i < args.length; i++) {
             model.addElement(args[i]);
         }
         list.setModel(model);
@@ -132,6 +133,7 @@ public class Frame extends JFrame {
                             r.printRecipeInfo(selectedRecipe, Frame.this, mainPanel);
 
                         } else if(selectedOption.equals("Παραγωγή Λίστας Αγορών")) {
+                            sl.printShoppingList(selectedRecipe, Frame.this, mainPanel);
 
                         } else if(selectedOption.equals("Εκτέλεση Συνταγής")) {
 
@@ -143,6 +145,71 @@ public class Frame extends JFrame {
 
         });
 
+    }
+
+    public ArrayList<String> getRecipes(Frame frame) {
+        // Δημιουργία JDialog
+        JDialog dialog = new JDialog(frame, "Καταχώρηση Συνταγών", true);
+        dialog.setSize(300, 200);
+        dialog.setLayout(new BoxLayout(dialog.getContentPane(), BoxLayout.Y_AXIS));
+
+        // Δημιουργία μηνύματος
+        JLabel messageLabel = new JLabel("Καταχωρήστε τις συνταγές που θέλετε:");
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(messageLabel);
+
+        // Προσθήκη απόστασης
+        dialog.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Δημιουργία JTextField
+        JTextField inputField = new JTextField();
+        inputField.setMaximumSize(new Dimension(200, 30));
+        inputField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(inputField);
+
+        // Προσθήκη απόστασης
+        dialog.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Δημιουργία JButton
+        JButton nextRecipeButton = new JButton("Επόμενη συνταγή");
+        nextRecipeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(nextRecipeButton);
+
+        // Δημιουργία JButton
+        JButton submitButton = new JButton("Καταχώρηση συνταγών");
+        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(submitButton);
+
+        // Αποθήκευση του αριθμού
+        ArrayList<String> recipes = new ArrayList<>();
+
+        // Ακροατής για το κουμπί
+        nextRecipeButton.addActionListener(e -> {
+            try {
+                recipes.add(inputField.getText());
+                inputField.setText("");
+//                dialog.dispose(); // Κλείσιμο του διαλόγου
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Παρακαλώ εισάγετε μία συνταγή!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        submitButton.addActionListener(e -> {
+            try {
+                recipes.add(inputField.getText());
+                dialog.dispose(); // Κλείσιμο του διαλόγου
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Παρακαλώ καταχωρήστε τις συνταγές!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        // Εμφάνιση του διαλόγου
+        dialog.setLocationRelativeTo(frame);
+        dialog.setVisible(true);
+
+
+        return recipes;
     }
 
 

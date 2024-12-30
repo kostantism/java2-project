@@ -1,5 +1,8 @@
 package hua.java2.project.cooking;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,10 +21,27 @@ public class ShoppingList implements Info {
     }
 
     //εκτυπωση λιστας αγορας
-    public void printInfo(int numOfPeople) {
-        System.out.println("Λίστα αγορών:");
-        System.out.println();
-//        r.printIngredients(numOfPeople, ingredients);
+//    public void printInfo(int numOfPeople) {
+//        System.out.println("Λίστα αγορών:");
+//        System.out.println();
+////        r.printIngredients(numOfPeople, ingredients);
+//    }
+
+    public void printInfo(int numOfPeople, Frame frame, JPanel mainPanel) {
+        mainPanel.removeAll();
+
+        mainPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
+
+        JLabel label;
+
+        label = new JLabel("Λίστα αγορών: ", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(label);
+
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        r.printIngredients(numOfPeople, ingredients, mainPanel);
     }
 
     //διαβαζει το αρχειο και αποθηκευει τα υλικα με τις ποσοτητες τους
@@ -156,12 +176,20 @@ public class ShoppingList implements Info {
     }
 
     //διαβαζει συνταγες και εκτυπωνει τη λιστα αγορων
-    public void printShoppingList(String[] args, int argsLength) {
-        int numOfPeople = r.numOfPeople();
+//    public void printShoppingList(String[] args, int argsLength) {
+//        int numOfPeople = r.numOfPeople();
+//
+//        readRecipes(args, args.length);
+//
+////        printInfo(numOfPeople);
+//    }
 
-        readRecipes(args, args.length);
+    public void printShoppingList(String f, Frame frame, JPanel mainPanel) {
+        int numOfPeople = r.showNumOfPeopleDialog(frame);
 
-        printInfo(numOfPeople);
+        readRecipe(f);
+
+        printInfo(numOfPeople, frame, mainPanel);
     }
 
     //προσθετει νεο υλικο η ενημερωνει μονο την ποσοτητα του

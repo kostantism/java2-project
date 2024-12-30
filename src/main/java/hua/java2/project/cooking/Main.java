@@ -1,6 +1,7 @@
 package hua.java2.project.cooking;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,6 +14,15 @@ public class Main {
         if(args.length == 0) {
             System.out.println("No arguments provided.");
 
+            String[] recipes = frame.getRecipes(frame).toArray(new String[0]);
+
+            frame.printRecipeList(recipes);
+
+//            for (String recipe : recipes) {
+//                System.out.println("Όνομα: " + recipe);
+//                System.out.println();
+//            }
+
         } else if(args.length == 1 && !args[0].equals("-list")) {
             System.out.println();
 
@@ -23,7 +33,7 @@ public class Main {
         } else if(args[0].equals("-list") && args.length > 1) {
             System.out.println();
 
-            frame.printRecipeList(args, args.length);
+            frame.printRecipeList(args);
 
             //2η λειτουργια εκτυπωση λιστας αγορας
 

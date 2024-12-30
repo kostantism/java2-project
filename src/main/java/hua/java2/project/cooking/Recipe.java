@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Recipe {///////////////////////////////implements info
+public class Recipe implements Info{
 
     Time t = new Time(0, "");
     MeasurementUnit ms = new MeasurementUnit("");
@@ -66,7 +66,7 @@ public class Recipe {///////////////////////////////implements info
 //        printSteps(numOfPeople);
 //    }
 
-    public void printInfoFrame(int numOfPeople, Frame frame, JPanel mainPanel){
+    public void printInfo(int numOfPeople, Frame frame, JPanel mainPanel){
         mainPanel.removeAll();
 
         mainPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
@@ -495,7 +495,7 @@ public class Recipe {///////////////////////////////implements info
         readRecipe(f);
 
 //        printInfo(numOfPeople);
-        printInfoFrame(numOfPeople, frame, mainPanel);
+        printInfo(numOfPeople, frame, mainPanel);
     }
 
 
