@@ -172,32 +172,34 @@ public class Frame extends JFrame {
         dialog.add(Box.createRigidArea(new Dimension(0, 10)));
 
         // Δημιουργία JButton
-        JButton nextRecipeButton = new JButton("Επόμενη συνταγή");
-        nextRecipeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        dialog.add(nextRecipeButton);
-
-        // Δημιουργία JButton
-        JButton submitButton = new JButton("Καταχώρηση συνταγών");
+        JButton submitButton = new JButton("Καταχώρηση συνταγής");
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         dialog.add(submitButton);
+
+        // Δημιουργία JButton
+        JButton stop = new JButton("Τέλος");
+        stop.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(stop);
 
         // Αποθήκευση του αριθμού
         ArrayList<String> recipes = new ArrayList<>();
 
         // Ακροατής για το κουμπί
-        nextRecipeButton.addActionListener(e -> {
+        submitButton.addActionListener(e -> {
             try {
                 recipes.add(inputField.getText());
                 inputField.setText("");
-//                dialog.dispose(); // Κλείσιμο του διαλόγου
+                inputField.requestFocus();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(dialog, "Παρακαλώ εισάγετε μία συνταγή!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        submitButton.addActionListener(e -> {
+        stop.addActionListener(e -> {
             try {
-                recipes.add(inputField.getText());
+                if(!inputField.getText().isEmpty()) {
+                    recipes.add(inputField.getText());
+                }
                 dialog.dispose(); // Κλείσιμο του διαλόγου
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(dialog, "Παρακαλώ καταχωρήστε τις συνταγές!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
@@ -207,7 +209,6 @@ public class Frame extends JFrame {
         // Εμφάνιση του διαλόγου
         dialog.setLocationRelativeTo(frame);
         dialog.setVisible(true);
-
 
         return recipes;
     }
