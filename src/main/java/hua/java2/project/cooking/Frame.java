@@ -136,7 +136,7 @@ public class Frame extends JFrame {
                             sl.printShoppingList(selectedRecipe, Frame.this, mainPanel);
 
                         } else if(selectedOption.equals("Εκτέλεση Συνταγής")) {
-
+                            r.executeRecipe(selectedRecipe, Frame.this, mainPanel);
                         }
 
                     }

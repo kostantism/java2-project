@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import gr.hua.dit.oop2.countdown.Countdown;
+import gr.hua.dit.oop2.countdown.CountdownFactory;
+import gr.hua.dit.oop2.countdown.Notifier;
+
 public class Recipe implements Info{
 
     Time t = new Time(0, "");
@@ -873,6 +877,45 @@ public class Recipe implements Info{
         // Επανασχεδιασμός του mainPanel
         mainPanel.revalidate();
         mainPanel.repaint();
+    }
+
+
+    public void executeRecipe(String f, Frame frame, JPanel mainPanel) {
+        System.out.println(System.getProperty("java.class.path"));
+
+//        int numOfPeople = showNumOfPeopleDialog(frame);
+//
+//        readRecipe(f);
+//
+////        printInfo(numOfPeople);
+//        printInfo(numOfPeople, frame, mainPanel);
+
+        // Δημιουργία αντίστροφης μέτρησης για 10 δευτερόλεπτα
+        Countdown countdown = CountdownFactory.countdown("MyCountdown", 10);
+
+        // Προσθήκη ειδοποίησης όταν τελειώσει η αντίστροφη μέτρηση
+//        countdown.addNotifier(new Notifier() {
+//            @Override
+//            public void finished(Countdown c) {
+//                System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
+//            }
+//        });
+
+        // Εκκίνηση αντίστροφης μέτρησης
+        countdown.start();
+
+        // Εμφάνιση των υπολοίπων δευτερολέπτων κάθε δευτερόλεπτο
+        while (countdown.secondsRemaining() > 0) {
+            System.out.println("Δευτερόλεπτα που απομένουν: " + countdown.secondsRemaining());
+            try {
+                Thread.sleep(1000); // Αναμονή 1 δευτερολέπτου
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Διακοπή αντίστροφης μέτρησης
+        countdown.stop();
     }
 
 
