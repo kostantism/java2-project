@@ -68,6 +68,34 @@ public class Time implements UnitConvertion{
         return minutes + " minutes";
     }
 
+    public int convertToMinutes(String u, int h) {
+        int minutes = 0;
+
+        if(u.equals("hours")) {
+            minutes = h * 60;
+        } else if(u.equals("minutes")) {
+            minutes = h;
+        }
+
+//        minutes = h*60;
+
+        return minutes;
+    }
+
+    public int convertToSeconds(String u, float t) {
+        int sec = 0;
+
+        if(u.equals("minutes")) {
+            sec = (int)(t * 60);
+        } else if(u.equals("hours")) {
+            sec = (int) (t * 60 * 60);
+        } else if(u.equals("seconds")) {
+            sec = (int) t;
+        }
+
+        return sec;
+    }
+
     public int addMinutes(int q, String name){
         int minutes = 0;
 

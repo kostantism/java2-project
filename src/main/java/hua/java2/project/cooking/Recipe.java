@@ -880,43 +880,251 @@ public class Recipe implements Info{
     }
 
 
+//    public void executeRecipe(String f, Frame frame, JPanel mainPanel) {
+////        System.out.println(System.getProperty("java.class.path"));
+//
+//        int numOfPeople = showNumOfPeopleDialog(frame);
+////
+//        readRecipe(f);
+////
+//////        printInfo(numOfPeople);
+////        printInfo(numOfPeople, frame, mainPanel);
+//
+//        int counter = 1;
+//
+//        for (Step stps : steps) {
+////            // Δημιουργία JLabel για την περιγραφή του βήματος
+////            JLabel stepLabel = new JLabel(counter + ". " + stps.getDescription());
+////            stepLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+////            stepLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+////            mainPanel.add(stepLabel);
+//
+//            System.out.println(counter + ". " + stps.getDescription());
+//            System.out.println();
+//
+//            // Αν υπάρχει χρόνος βήματος, τον εμφανίζουμε
+//            if (stps.getStepTime() != 0) {
+////                JLabel timeLabel = new JLabel("Χρόνος βήματος: " + t.convert(stps.getStepTime(), "minutes"));
+////                timeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+////                timeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+////                mainPanel.add(timeLabel);
+//
+//                Countdown countdown = CountdownFactory.countdown("MyCountdown",
+//                        t.convertToSeconds("minutes", t.convertToMinutes("minutes", (int) stps.getStepTime())));
+//
+////                System.out.println("xronos bhmatos: " + t.convertToSeconds("minutes", (int) stps.getStepTime()));
+//
+//                countdown.start();
+//
+////                // Δημιουργία του JOptionPane για την εμφάνιση της αντίστροφης μέτρησης
+////                JOptionPane optionPane = new JOptionPane();
+////                JDialog countdownDialog = optionPane.createDialog(frame, "Αντίστροφη Μέτρηση");
+////                countdownDialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+//
+////                // Ενημέρωση του διαλόγου κάθε δευτερόλεπτο
+////                while (countdown.secondsRemaining() > 0) {
+////                    String message = "Υπολειπόμενος χρόνος: " + countdown.secondsRemaining() + " δευτερόλεπτα";
+////                    optionPane.setMessage(message);
+////
+////                    // Ανανεώνουμε το παράθυρο του JOptionPane
+////                    countdownDialog.repaint();
+////
+////                    // Κοιμόμαστε για 1 δευτερόλεπτο πριν ανανεώσουμε
+////                    try {
+////                        Thread.sleep(1000);
+////                    } catch (InterruptedException e) {
+////                        e.printStackTrace();
+////                    }
+////                }
+//
+//                while (countdown.secondsRemaining() > 0) {
+//                    System.out.println("Δευτερόλεπτα που απομένουν: " + countdown.secondsRemaining());
+//                    try {
+//                        Thread.sleep(1000); // Αναμονή 1 δευτερολέπτου
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                // Όταν ολοκληρωθεί η αντίστροφη μέτρηση, σταματάμε την αντίστροφη μέτρηση και κλείνουμε το διάλογο
+//                countdown.stop();
+////                countdownDialog.dispose();
+//                System.out.println("NEO BHMA--------------------------------------------------");
+//            }
+//
+//            // Προσθήκη απόστασης μεταξύ των βημάτων
+//            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//
+////            // Εμφάνιση των υλικών του βήματος
+////            JLabel ingredientsLabel = new JLabel("\nΥλικά βήματος:");
+////            ingredientsLabel.setFont(new Font("Arial", Font.BOLD, 14));
+////            ingredientsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+////            mainPanel.add(ingredientsLabel);
+////
+////            printIngredients(numOfPeople, stps.getIngredients(), mainPanel);
+////
+////            // Εμφάνιση των σκευών του βήματος
+////            JLabel cookwareLabel = new JLabel("\nΣκεύη βήματος:");
+////            cookwareLabel.setFont(new Font("Arial", Font.BOLD, 14));
+////            cookwareLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+////            mainPanel.add(cookwareLabel);
+////
+////            printCookwares(stps.getCookwares(), mainPanel);
+////
+////            // Προσθήκη απόστασης μεταξύ των βημάτων
+////            mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+//
+//            counter++;
+//        }
+//
+////        // Δημιουργία αντίστροφης μέτρησης για 10 δευτερόλεπτα
+////        Countdown countdown = CountdownFactory.countdown("MyCountdown", 10);
+////
+////        // Προσθήκη ειδοποίησης όταν τελειώσει η αντίστροφη μέτρηση
+////        countdown.addNotifier(new Notifier() {
+////            @Override
+////            public void finished(Countdown c) {
+////                System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
+////            }
+////        });
+////
+////        // Εκκίνηση αντίστροφης μέτρησης
+////        countdown.start();
+////
+////        // Εμφάνιση των υπολοίπων δευτερολέπτων κάθε δευτερόλεπτο
+////        while (countdown.secondsRemaining() > 0) {
+////            System.out.println("Δευτερόλεπτα που απομένουν: " + countdown.secondsRemaining());
+////            try {
+////                Thread.sleep(1000); // Αναμονή 1 δευτερολέπτου
+////            } catch (InterruptedException e) {
+////                e.printStackTrace();
+////            }
+////        }
+////
+////        // Διακοπή αντίστροφης μέτρησης
+////        countdown.stop();
+//    }
+
+
     public void executeRecipe(String f, Frame frame, JPanel mainPanel) {
-        System.out.println(System.getProperty("java.class.path"));
+        JLabel titleLabel;
+        JList<String> list;
 
 //        int numOfPeople = showNumOfPeopleDialog(frame);
+
+        readRecipe(f);
+
+        mainPanel.removeAll(); // Καθαρισμός του panel
+
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        titleLabel = new JLabel("Εκτέλεση Συνταγής", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(titleLabel);
+
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        int counter = 1;
+
+        list = new JList<>();
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        JScrollPane scrollPane = new JScrollPane(list);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        frame.add(mainPanel);
+
+        DefaultListModel<String> model = new DefaultListModel<>();
+
+        for (Step stps : steps) {
+//            // Προσθήκη του βήματος στο mainPanel
+//            JLabel stepLabel = new JLabel(counter + ". " + stps.getDescription());
+//            stepLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+//            stepLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+//            mainPanel.add(stepLabel);
 //
-//        readRecipe(f);
-//
-////        printInfo(numOfPeople);
-//        printInfo(numOfPeople, frame, mainPanel);
+//            // Προσθήκη απόστασης
+//            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // Δημιουργία αντίστροφης μέτρησης για 10 δευτερόλεπτα
-        Countdown countdown = CountdownFactory.countdown("MyCountdown", 10);
 
-        // Προσθήκη ειδοποίησης όταν τελειώσει η αντίστροφη μέτρηση
-//        countdown.addNotifier(new Notifier() {
-//            @Override
-//            public void finished(Countdown c) {
-//                System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
-//            }
-//        });
+            model.addElement(counter + ". " + stps.getDescription());
+//            model.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
+            list.setModel(model);
 
-        // Εκκίνηση αντίστροφης μέτρησης
-        countdown.start();
+            mainPanel.revalidate();
+            mainPanel.repaint();
 
-        // Εμφάνιση των υπολοίπων δευτερολέπτων κάθε δευτερόλεπτο
-        while (countdown.secondsRemaining() > 0) {
-            System.out.println("Δευτερόλεπτα που απομένουν: " + countdown.secondsRemaining());
-            try {
-                Thread.sleep(1000); // Αναμονή 1 δευτερολέπτου
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            // Αν υπάρχει χρόνος για το βήμα
+            if (stps.getStepTime() != 0) {
+                JDialog countdownDialog = new JDialog(frame, "Αντίστροφη Μέτρηση", true);
+                countdownDialog.setLayout(new BoxLayout(countdownDialog.getContentPane(), BoxLayout.Y_AXIS));
+
+                JLabel countdownLabel = new JLabel("Χρόνος βήματος: " + stps.getStepTime() + " λεπτά");
+                countdownLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                countdownLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                countdownDialog.add(countdownLabel);
+
+                JLabel remainingTimeLabel = new JLabel("Υπολειπόμενος χρόνος: ");
+                remainingTimeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+                remainingTimeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                countdownDialog.add(remainingTimeLabel);
+
+                countdownDialog.setSize(400, 200);
+                countdownDialog.setLocationRelativeTo(frame);
+
+                Countdown countdown = CountdownFactory.countdown("MyCountdown",
+                        t.convertToSeconds("minutes", t.convertToMinutes("minutes", (int) stps.getStepTime())));
+
+                countdown.start();
+
+                new Thread(() -> {
+                    while (countdown.secondsRemaining() > 0) {
+                        remainingTimeLabel.setText("Υπολειπόμενος χρόνος: " + countdown.secondsRemaining() + " δευτερόλεπτα");
+                        countdownDialog.repaint();
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    countdown.stop();
+                    SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
+                }).start();
+
+                countdownDialog.setVisible(true);
             }
+
+            // Δημιουργία διαλόγου με το κουμπί επιβεβαίωσης
+            JDialog confirmDialog = new JDialog(frame, "Επιβεβαίωση Βήματος", true);
+            confirmDialog.setLayout(new BoxLayout(confirmDialog.getContentPane(), BoxLayout.Y_AXIS));
+
+            JLabel confirmLabel = new JLabel("Πατήστε το κουμπί για να συνεχίσετε στο επόμενο βήμα.");
+            confirmLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            confirmLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            confirmDialog.add(confirmLabel);
+
+            JButton confirmButton = new JButton("Επιβεβαίωση");
+            confirmButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            confirmButton.addActionListener(e -> confirmDialog.dispose());
+            confirmDialog.add(confirmButton);
+
+            confirmDialog.setSize(400, 150);
+            confirmDialog.setLocationRelativeTo(frame);
+
+            confirmDialog.setVisible(true);
+
+            counter++;
         }
 
-        // Διακοπή αντίστροφης μέτρησης
-        countdown.stop();
+        // Ενημέρωση του mainPanel
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
+
 
 
 }
