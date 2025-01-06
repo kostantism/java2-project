@@ -170,19 +170,19 @@ public class ShoppingList implements Info {
     private void readRecipes(String[] args, int argsLength) {
         int i;
 
-        for(i = 1; i < argsLength; i++){
+        for(i = 0; i < argsLength; i++){//////////////////
             readRecipe(args[i]);
         }
     }
 
     //διαβαζει συνταγες και εκτυπωνει τη λιστα αγορων
-//    public void printShoppingList(String[] args, int argsLength) {
-//        int numOfPeople = r.numOfPeople();
-//
-//        readRecipes(args, args.length);
-//
-////        printInfo(numOfPeople);
-//    }
+    public void printShoppingList(String[] args, Frame frame, JPanel mainPanel) {
+        int numOfPeople = r.showNumOfPeopleDialog(frame);
+
+        readRecipes(args, args.length);
+
+        printInfo(numOfPeople, frame, mainPanel);
+    }
 
     public void printShoppingList(String f, Frame frame, JPanel mainPanel) {
         int numOfPeople = r.showNumOfPeopleDialog(frame);

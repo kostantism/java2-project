@@ -86,6 +86,28 @@ public class Frame extends JFrame {
 
         });
 
+
+
+        // Δημιουργία JButton
+        JButton executeRecipeButton = new JButton("Παραγωγή Λίστας Αγορών");
+        executeRecipeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(executeRecipeButton);
+
+        executeRecipeButton.addActionListener(e -> {
+            try {
+                ListModel<String> model = list.getModel();
+                String[] recipeList = new String[model.getSize()];
+
+                for (int i = 0; i < model.getSize(); i++) {
+                    recipeList[i] = model.getElementAt(i);
+                }
+
+                sl.printShoppingList(recipeList, Frame.this, mainPanel);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Σφάλμα στη δημιουργία της λίστας αγορών!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
     }
 
     public void printRecipeList(int start, String[] args) {
