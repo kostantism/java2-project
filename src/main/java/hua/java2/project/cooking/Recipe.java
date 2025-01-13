@@ -938,8 +938,25 @@ public class Recipe implements Info{
                 countdownDialog.setSize(400, 200);
                 countdownDialog.setLocationRelativeTo(frame);
 
-                Countdown countdown = CountdownFactory.countdown("MyCountdown",
+                Countdown countdown = CountdownFactory.countdown(
                         t.convertToSeconds("minutes", t.convertToMinutes("minutes", (int) stps.getStepTime())));
+
+
+                // Προσθήκη ειδοποίησης όταν τελειώσει η αντίστροφη μέτρηση
+//                countdown.addNotifier(new Notifier() {
+//                    @Override
+//                    public void finished(Countdown c) {
+////                        System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
+////                        SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
+//                        SwingUtilities.invokeLater(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!");
+//                            }
+//                        });
+//                    }
+//
+//                });
 
                 countdown.start();
 
@@ -956,6 +973,7 @@ public class Recipe implements Info{
 
                     countdown.stop();
                     SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
+
                 }).start();
 
                 countdownDialog.setVisible(true);

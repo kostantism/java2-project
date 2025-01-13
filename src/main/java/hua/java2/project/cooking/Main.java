@@ -62,12 +62,12 @@ public class Main {
 //        Countdown countdown = CountdownFactory.countdown("MyCountdown", 10);
 //
 //        // Προσθήκη ειδοποίησης όταν τελειώσει η αντίστροφη μέτρηση
-////        countdown.addNotifier(new Notifier() {
-////            @Override
-////            public void finished(Countdown c) {
-////                System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
-////            }
-////        });
+//        countdown.addNotifier(new Notifier() {
+//            @Override
+//            public void finished(Countdown c) {
+//                System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
+//            }
+//        });
 //
 //        // Εκκίνηση αντίστροφης μέτρησης
 //        countdown.start();

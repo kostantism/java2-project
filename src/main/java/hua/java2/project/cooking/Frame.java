@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Frame extends JFrame {
@@ -170,6 +171,8 @@ public class Frame extends JFrame {
     }
 
     public ArrayList<String> getRecipes(Frame frame) {
+        File selectedFile = getFile();
+
         // Δημιουργία JDialog
         JDialog dialog = new JDialog(frame, "Καταχώρηση Συνταγών", true);
         dialog.setSize(300, 200);
@@ -190,6 +193,8 @@ public class Frame extends JFrame {
         inputField.setAlignmentX(Component.CENTER_ALIGNMENT);
         dialog.add(inputField);
 
+        inputField.setText(selectedFile.getName());///////////////////////
+
         // Προσθήκη απόστασης
         dialog.add(Box.createRigidArea(new Dimension(0, 10)));
 
@@ -199,9 +204,14 @@ public class Frame extends JFrame {
         dialog.add(submitButton);
 
         // Δημιουργία JButton
-        JButton stop = new JButton("Τέλος");
-        stop.setAlignmentX(Component.CENTER_ALIGNMENT);
-        dialog.add(stop);
+        JButton nextRecipeButton = new JButton("Επιλογή νέας συνταγής");
+        nextRecipeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(nextRecipeButton);
+
+        // Δημιουργία JButton
+        JButton stopButton = new JButton("Τέλος");
+        stopButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        dialog.add(stopButton);
 
         // Αποθήκευση του αριθμού
         ArrayList<String> recipes = new ArrayList<>();
@@ -209,7 +219,8 @@ public class Frame extends JFrame {
         // Ακροατής για το κουμπί
         submitButton.addActionListener(e -> {
             try {
-                recipes.add(inputField.getText());
+//                recipes.add(inputField.getText());
+                recipes.add(selectedFile.getName());//////////////////////
                 inputField.setText("");
                 inputField.requestFocus();
             } catch (NumberFormatException ex) {
@@ -217,10 +228,15 @@ public class Frame extends JFrame {
             }
         });
 
-        stop.addActionListener(e -> {
+        nextRecipeButton.addActionListener(e -> {
+            inputField.setText(getFile().getName());
+        });
+
+        stopButton.addActionListener(e -> {
             try {
                 if(!inputField.getText().isEmpty()) {
-                    recipes.add(inputField.getText());
+//                    recipes.add(inputField.getText());
+                    recipes.add(selectedFile.getName());
                 }
                 dialog.dispose(); // Κλείσιμο του διαλόγου
             } catch (NumberFormatException ex) {
@@ -233,6 +249,26 @@ public class Frame extends JFrame {
         dialog.setVisible(true);
 
         return recipes;
+    }
+
+    private File getFile() {
+        // Δημιουργία του JFrame (προαιρετικό)
+        JFrame fileChooserFrame = new JFrame();
+        fileChooserFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        fileChooserFrame.setSize(400, 300);
+
+        // Δημιουργία ενός JFileChooser
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Ρύθμιση της αρχικής διαδρομής (προαιρετικά)
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+        // Άνοιγμα του παραθύρου διαλόγου
+        int result = fileChooser.showOpenDialog(fileChooserFrame);
+
+        File selectedFile = fileChooser.getSelectedFile();
+
+        return selectedFile;
     }
 
 
