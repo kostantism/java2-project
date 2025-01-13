@@ -255,7 +255,7 @@ public class Frame extends JFrame {
         // Δημιουργία του JFrame (προαιρετικό)
         JFrame fileChooserFrame = new JFrame();
         fileChooserFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fileChooserFrame.setSize(400, 300);
+        fileChooserFrame.setSize(600, 500);
 
         // Δημιουργία ενός JFileChooser
         JFileChooser fileChooser = new JFileChooser();
