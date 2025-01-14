@@ -61,7 +61,7 @@ public class Main {
         // Δημιουργία αντίστροφης μέτρησης για 10 δευτερόλεπτα
         Countdown countdown = CountdownFactory.countdown("MyCountdown", 10);
 
-        System.out.println("apomenoun: " + countdown.secondsRemaining());
+//        System.out.println("apomenoun: " + countdown.secondsRemaining());
 
         // Προσθήκη ειδοποίησης όταν τελειώσει η αντίστροφη μέτρηση
         countdown.addNotifier(new Notifier() {
@@ -71,13 +71,12 @@ public class Main {
             }
         });
 
+        boolean zero = false;
+
         // Εκκίνηση αντίστροφης μέτρησης
         countdown.start();
-
 //        System.out.println("apomenoun: " + countdown.secondsRemaining());
-
-//         Εμφάνιση των υπολοίπων δευτερολέπτων κάθε δευτερόλεπτο
-        while (countdown.secondsRemaining() > 0) {
+        while (countdown.secondsRemaining() >= 0) {
             System.out.println("Δευτερόλεπτα που απομένουν: " + countdown.secondsRemaining());
             try {
                 Thread.sleep(1000); // Αναμονή 1 δευτερολέπτου
@@ -86,6 +85,12 @@ public class Main {
                 System.out.println("error");
             }
 //            System.out.println("apomenoun: " + countdown.secondsRemaining());
+            if(zero) {
+                break;
+            }
+            if(countdown.secondsRemaining() == 0) {
+                zero = true;
+            }
         }
 
         // Διακοπή αντίστροφης μέτρησης
