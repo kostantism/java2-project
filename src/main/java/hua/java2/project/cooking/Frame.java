@@ -48,8 +48,6 @@ public class Frame extends JFrame {
 
         this.add(mainPanel);
 
-//        frame.printRecipeList(args, args.length);
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
 

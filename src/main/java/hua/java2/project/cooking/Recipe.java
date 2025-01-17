@@ -3,6 +3,8 @@ package hua.java2.project.cooking;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,12 +22,15 @@ public class Recipe implements Info{
 
     Time t = new Time(0, "");
     MeasurementUnit ms = new MeasurementUnit("");
+//    Frame fr = new Frame();
 
     private String name;
     private Map<String, Map<String, Float>> ingredients;
     private ArrayList<Cookware> cookwares;
     private ArrayList<Step> steps;
     private float totalTime;
+
+    private String selectedRecipe;
 
     public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Cookware> cookwares, ArrayList<Step> steps, float totalTime) {
         this.name = name;
@@ -70,67 +75,80 @@ public class Recipe implements Info{
 //        printSteps(numOfPeople);
 //    }
 
+
     public void printInfo(int numOfPeople, Frame frame, JPanel mainPanel){
         mainPanel.removeAll();
 
-        mainPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
+        // Δημιουργία JButton
+//        JButton backButton = new JButton("Επιστροφή");
+//        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        mainPanel.add(backButton);
+//
+//        backButton.addActionListener(e -> {
+//            frame.showSelectedRecipe(selectedRecipe);
+//        });
 
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        mainPanel.setLayout(new BorderLayout()); // Αλλάζουμε σε BorderLayout για ευκολία διαχείρισης
+        mainPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
 
-        // Ορίζουμε την κάθετη και οριζόντια μπάρα scrolling, αν χρειάζεται
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Πάντα ενεργή η κάθετη μπάρα
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); // Οριζόντια μπάρα μόνο αν χρειάζεται
+        // Προσθήκη του τίτλου στο πάνω μέρος του mainPanel
+        JLabel titleLabel = new JLabel("Εμφάνιση Συνταγής", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Δημιουργία νέου panel για τη λίστα
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel label;
 
-        label = new JLabel("Yλικά συνταγής: ", SwingConstants.CENTER);
+        // Υλικά Συνταγής
+        label = new JLabel("Υλικά συνταγής: ", SwingConstants.LEFT);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(label);
+        listPanel.add(label);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        listPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        printIngredients(numOfPeople, ingredients, listPanel);
 
-        printIngredients(numOfPeople, ingredients, mainPanel);
-
-        label = new JLabel("Σκεύοι συνταγής: ", SwingConstants.CENTER);
+        // Σκεύη Συνταγής
+        label = new JLabel("Σκεύη συνταγής: ", SwingConstants.LEFT);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(label);
+        listPanel.add(label);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        listPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        printCookwares(cookwares, listPanel);
 
-        printCookwares(cookwares, mainPanel);
-
-        label = new JLabel("Συνολικός Χρόνος συνταγής: ", SwingConstants.CENTER);
+        // Συνολικός Χρόνος Συνταγής
+        label = new JLabel("Συνολικός Χρόνος συνταγής: ", SwingConstants.LEFT);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(label);
+        listPanel.add(label);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-
-//        System.out.println(t.convert(totalTime, "minutes"));
+        listPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JLabel timeLabel = new JLabel(t.convert(totalTime, "minutes"));
         timeLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        timeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(timeLabel);
+        listPanel.add(timeLabel);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        listPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        label = new JLabel("Αναλυτικά τα βήματα της συνταγής: ", SwingConstants.CENTER);
+        // Αναλυτικά Βήματα Συνταγής
+        label = new JLabel("Αναλυτικά τα βήματα της συνταγής: ", SwingConstants.LEFT);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(label);
+        listPanel.add(label);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        listPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        printSteps(numOfPeople, listPanel);
 
-        printSteps(numOfPeople, mainPanel);
+        // Προσθήκη του listPanel σε JScrollPane
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        // Προσθήκη του JScrollPane στο frame (ή container)
-        // Παράδειγμα: Αν έχετε ένα JFrame ή άλλο container, προσθέστε το scrollPane σε αυτό
-        frame.getContentPane().add(scrollPane);
+        // Προσθήκη του scrollPane στο κεντρικό τμήμα του mainPanel
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Ανανεώστε το panel και frame για να εμφανιστούν οι αλλαγές
+        // Ανανεώστε το frame για να εμφανιστούν οι αλλαγές
         frame.revalidate();
         frame.repaint();
     }
@@ -209,6 +227,8 @@ public class Recipe implements Info{
                             totalTime += Float.parseFloat(tmpTime);
                         } else if (tmpTimeUnit.equals("hours")) {
                             totalTime += Float.parseFloat(tmpTime) * 60;
+                        } else if (tmpTimeUnit.equals("seconds")) {
+                            totalTime += Float.parseFloat(tmpTime) / 60;
                         }
 
                         tmpTime = "";
@@ -235,6 +255,8 @@ public class Recipe implements Info{
                                     time += Float.parseFloat(tmpTime);
                                 } else if (timeUnit.equals("hours")) {
                                     time += Float.parseFloat(tmpTime) * 60;
+                                } else if (timeUnit.equals("seconds")) {
+                                    time += Float.parseFloat(tmpTime) / 60;
                                 }
 
                             } else {
@@ -457,6 +479,8 @@ public class Recipe implements Info{
                     totalTime += Float.parseFloat(tmpTime);
                 } else if (tmpTimeUnit.equals("hours")) {
                     totalTime += Float.parseFloat(tmpTime) * 60;
+                } else if (tmpTimeUnit.equals("seconds")) {
+                    totalTime += Float.parseFloat(tmpTime) / 60;
                 }
             }
 
@@ -494,9 +518,11 @@ public class Recipe implements Info{
 
     //διαβαζει την συνταγη και εκτυπωνει τις πληροφοριες της
     public void printRecipeInfo(String f, Frame frame, JPanel mainPanel) {
+        selectedRecipe = f;
+
         int numOfPeople = showNumOfPeopleDialog(frame);
 
-        readRecipe(f);
+        readRecipe(selectedRecipe);
 
 //        printInfo(numOfPeople);
         printInfo(numOfPeople, frame, mainPanel);
@@ -925,7 +951,15 @@ public class Recipe implements Info{
                 JDialog countdownDialog = new JDialog(frame, "Αντίστροφη Μέτρηση", true);
                 countdownDialog.setLayout(new BoxLayout(countdownDialog.getContentPane(), BoxLayout.Y_AXIS));
 
-                JLabel countdownLabel = new JLabel("Χρόνος βήματος: " + stps.getStepTime() + " λεπτά");
+                String text = "";
+
+                if (stps.getStepTime() % 1 != 0) {
+                    text = "Χρόνος βήματος: " + stps.getStepTime() * 60 + " δευτερόλεπτα";
+                } else {
+                    text = "Χρόνος βήματος: " + stps.getStepTime() + " λεπτά";
+                }
+
+                JLabel countdownLabel = new JLabel(text);
                 countdownLabel.setFont(new Font("Arial", Font.BOLD, 16));
                 countdownLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 countdownDialog.add(countdownLabel);
@@ -938,41 +972,63 @@ public class Recipe implements Info{
                 countdownDialog.setSize(400, 200);
                 countdownDialog.setLocationRelativeTo(frame);
 
-                Countdown countdown = CountdownFactory.countdown(
-                        t.convertToSeconds("minutes", t.convertToMinutes("minutes", (int) stps.getStepTime())));
+                int time;
+                Countdown countdown;
 
+                if (stps.getStepTime() % 1 != 0) {
+                    time = (int) (stps.getStepTime() * 60);
+                    countdown = CountdownFactory.countdown(time);
+                } else {
+                    time = (int) stps.getStepTime();
+                    countdown = CountdownFactory.countdown(
+                            t.convertToSeconds("minutes", t.convertToMinutes("minutes", time)));
+                }
+
+//                Countdown countdown = CountdownFactory.countdown(
+//                        t.convertToSeconds("minutes", t.convertToMinutes("minutes", time)));
 
                 // Προσθήκη ειδοποίησης όταν τελειώσει η αντίστροφη μέτρηση
-//                countdown.addNotifier(new Notifier() {
-//                    @Override
-//                    public void finished(Countdown c) {
-////                        System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
-////                        SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
-//                        SwingUtilities.invokeLater(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!");
-//                            }
-//                        });
-//                    }
-//
-//                });
+                countdown.addNotifier(new Notifier() {
+                    @Override
+                    public void finished(Countdown c) {
+//                        System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
+//                        SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!");
+                            }
+                        });
+                    }
 
+                });
+                
                 countdown.start();
 
                 new Thread(() -> {
-                    while (countdown.secondsRemaining() > 0) {
-                        remainingTimeLabel.setText("Υπολειπόμενος χρόνος: " + countdown.secondsRemaining() + " δευτερόλεπτα");
-                        countdownDialog.repaint();
+                    boolean zero = false;
+
+                    while (countdown.secondsRemaining() >= 0) {
+                        if(countdown.secondsRemaining() != 0) {
+                            remainingTimeLabel.setText("Υπολειπόμενος χρόνος: " + countdown.secondsRemaining() + " δευτερόλεπτα");
+                            countdownDialog.repaint();
+                        }
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+
+                        if(zero) {
+                            break;
+                        }
+                        if(countdown.secondsRemaining() == 0) {
+                            zero = true;
+                        }
                     }
 
                     countdown.stop();
-                    SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
+//                    SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
 
                 }).start();
 

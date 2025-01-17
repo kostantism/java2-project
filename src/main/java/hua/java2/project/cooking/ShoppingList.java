@@ -28,20 +28,59 @@ public class ShoppingList implements Info {
 //    }
 
     public void printInfo(int numOfPeople, Frame frame, JPanel mainPanel) {
+//        mainPanel.removeAll();
+//
+//        mainPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
+//
+//        JLabel label;
+//
+//        label = new JLabel("Λίστα αγορών: ", SwingConstants.CENTER);
+//        label.setFont(new Font("Arial", Font.BOLD, 20));
+//        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+//        mainPanel.add(label);
+//
+//        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//
+//        r.printIngredients(numOfPeople, ingredients, mainPanel);
+
         mainPanel.removeAll();
 
-        mainPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
+        mainPanel.setLayout(new BorderLayout()); // Χρήση BorderLayout για ευκολία
+        mainPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
+
+        // Προσθήκη τίτλου στο πάνω μέρος του mainPanel
+        JLabel titleLabel = new JLabel("Λίστα αγορών", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Δημιουργία ξεχωριστού panel για τα υπόλοιπα στοιχεία
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel label;
 
-        label = new JLabel("Λίστα αγορών: ", SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(label);
+        // Προσθήκη υλικών στη λίστα
+        label = new JLabel("Υλικά προς αγορά:", SwingConstants.LEFT);
+        label.setFont(new Font("Arial", Font.BOLD, 16));
+        listPanel.add(label);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        listPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        r.printIngredients(numOfPeople, ingredients, mainPanel);
+        // Προσθήκη των υλικών με τη μέθοδο r.printIngredients
+        r.printIngredients(numOfPeople, ingredients, listPanel);
+
+        // Προσθήκη του listPanel σε JScrollPane
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        // Προσθήκη του scrollPane στο κεντρικό μέρος του mainPanel
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Ανανεώστε το frame για να εμφανιστούν οι αλλαγές
+        frame.revalidate();
+        frame.repaint();
     }
 
     //διαβαζει το αρχειο και αποθηκευει τα υλικα με τις ποσοτητες τους

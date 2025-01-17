@@ -33,7 +33,7 @@ public class Time implements UnitConvertion{
     public String convert(float q, String name) {
 
         if(name.equals("minutes")) {
-            return convertToHours((int) q);
+            return convertToHours(q);
         } else if(name.equals("hours")) {
             return convertToMinutes(q);
         } else {
@@ -42,22 +42,47 @@ public class Time implements UnitConvertion{
 
     }
 
-    private String convertToHours(int m) {
-        int hours;
-        int minutes;
+    private String convertToHours(float m) {
+        float hours;
+        float minutes;
+        float seconds;
 
-        if(m < 60){
-            return m + " minutes";
+        if(m % 1 != 0) {
+            if(m < 1) {
+                return (int) (m*60) + " seconds";
 
-        } else if((m % 60) != 0){
-            hours = m/60;
-            minutes = m%60;
-            return hours + " hours " + minutes + " minutes";
+            } else if(m < 60) {
+                minutes = m - m%1;
+
+                return (int) minutes + " minutes " + (int) ((m%1)*60) + " seconds";
+
+            } else if((m - (m%1)) % 60 != 0) {
+                hours = m/60;
+                minutes = m%60;
+                seconds = minutes%1 * 60;
+
+                return (int) hours + " hours " + (int) minutes + " minutes " + (int) seconds + " seconds";
+
+            } else {
+                hours = m/60;
+                seconds = m%1 * 60;
+
+                return (int) hours + " hours " +  (int) seconds + " seconds";
+            }
+
+        } else if(m < 60){
+            return (int) m + " minutes";
+
+        } else if((m % 60) != 0) {
+            hours = m / 60;
+            minutes = m % 60;
+            return (int) hours + " hours " + (int) minutes + " minutes";
 
         } else {
             hours = m/60;
-            return hours + " hours";
+            return (int) hours + " hours";
         }
+
     }
 
     private String convertToMinutes(float h) {
@@ -75,6 +100,8 @@ public class Time implements UnitConvertion{
             minutes = h * 60;
         } else if(u.equals("minutes")) {
             minutes = h;
+        } else if(u.equals("seconds")) {
+
         }
 
 //        minutes = h*60;
