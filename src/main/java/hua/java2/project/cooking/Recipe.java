@@ -22,7 +22,6 @@ public class Recipe implements Info{
 
     Time t = new Time(0, "");
     MeasurementUnit ms = new MeasurementUnit("");
-//    Frame fr = new Frame();
 
     private String name;
     private Map<String, Map<String, Float>> ingredients;
@@ -90,16 +89,21 @@ public class Recipe implements Info{
 
         mainPanel.setLayout(new BorderLayout()); // Αλλάζουμε σε BorderLayout για ευκολία διαχείρισης
         mainPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
+        mainPanel.setBackground(new Color(223, 222, 222, 255));
 
         // Προσθήκη του τίτλου στο πάνω μέρος του mainPanel
         JLabel titleLabel = new JLabel("Εμφάνιση Συνταγής", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(new Color(25, 25, 112));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
+
 
         // Δημιουργία νέου panel για τη λίστα
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        listPanel.setBackground(new Color(255, 250, 240));
+        listPanel.setForeground(new Color(0, 0, 0));
 
         JLabel label;
 
@@ -144,6 +148,8 @@ public class Recipe implements Info{
         JScrollPane scrollPane = new JScrollPane(listPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBackground(new Color(240, 248, 255)); // Απαλό μπλε για το φόντο του JScrollPane 240, 248, 255
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(25, 25, 112), 1));
 
         // Προσθήκη του scrollPane στο κεντρικό τμήμα του mainPanel
         mainPanel.add(scrollPane, BorderLayout.CENTER);
@@ -670,29 +676,40 @@ public class Recipe implements Info{
     public int showNumOfPeopleDialog(Frame frame) {
         // Δημιουργία JDialog
         JDialog dialog = new JDialog(frame, "Πλήθος Ατόμων", true);
-        dialog.setSize(300, 200);
+        dialog.setSize(400, 250);
         dialog.setLayout(new BoxLayout(dialog.getContentPane(), BoxLayout.Y_AXIS));
+        dialog.getContentPane().setBackground(new Color(240, 248, 255)); // Απαλό μπλε φόντο
 
         // Δημιουργία μηνύματος
-        JLabel messageLabel = new JLabel("Γράψτε το πλήθος των ατόμων για τα οποία θέλετε να μαγειρέψετε:");
-        messageLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        JLabel messageLabel = new JLabel("<html>Γράψτε το πλήθος των ατόμων για<br>τα οποία θέλετε να μαγειρέψετε:<html>");
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        messageLabel.setForeground(new Color(25, 25, 112)); // Σκούρο μπλε χρώμα
         messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        messageLabel.setHorizontalAlignment(SwingConstants.CENTER); // Οριζόντια στοίχιση
+        messageLabel.setVerticalAlignment(SwingConstants.CENTER); // Κάθετη στοίχιση
         dialog.add(messageLabel);
 
         // Προσθήκη απόστασης
-        dialog.add(Box.createRigidArea(new Dimension(0, 10)));
+        dialog.add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Δημιουργία JTextField
         JTextField inputField = new JTextField();
-        inputField.setMaximumSize(new Dimension(200, 30));
+        inputField.setMaximumSize(new Dimension(300, 30));
         inputField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        inputField.setFont(new Font("Arial", Font.PLAIN, 14));
+        inputField.setForeground(Color.BLACK);
+        inputField.setBackground(Color.WHITE);
         dialog.add(inputField);
 
         // Προσθήκη απόστασης
-        dialog.add(Box.createRigidArea(new Dimension(0, 10)));
+        dialog.add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Δημιουργία JButton
         JButton submitButton = new JButton("Επιβεβαίωση");
+        submitButton.setFont(new Font("Arial", Font.BOLD, 14));
+        submitButton.setBackground(new Color(60, 179, 113)); // Πράσινο κουμπί
+        submitButton.setForeground(Color.WHITE); // Λευκό κείμενο
+        submitButton.setFocusPainted(false);
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         dialog.add(submitButton);
 
@@ -917,9 +934,11 @@ public class Recipe implements Info{
         mainPanel.removeAll(); // Καθαρισμός του panel
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(new Color(223, 222, 222, 255));
 
         titleLabel = new JLabel("Εκτέλεση Συνταγής", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(new Color(25, 25, 112));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(titleLabel);
 
@@ -930,8 +949,14 @@ public class Recipe implements Info{
         list = new JList<>();
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setFont(new Font("Arial", Font.PLAIN, 16));
+        list.setBackground(new Color(255, 250, 240)); // Απαλό μπεζ χρώμα
+        list.setForeground(new Color(0, 0, 0)); // Μαύρο για το κείμενο
+//        list.setSelectionBackground(new Color(173, 216, 230)); // Ανοιχτό μπλε για επιλεγμένα στοιχεία 173, 216, 230
+//        list.setSelectionForeground(new Color(0, 0, 0));
 
         JScrollPane scrollPane = new JScrollPane(list);
+        scrollPane.setBackground(new Color(240, 248, 255)); // Απαλό μπλε για το φόντο του JScrollPane 240, 248, 255
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(25, 25, 112), 1));
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         frame.add(mainPanel);
@@ -940,7 +965,6 @@ public class Recipe implements Info{
 
         for (Step stps : steps) {
             model.addElement(counter + ". " + stps.getDescription());
-//            model.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
             list.setModel(model);
 
             mainPanel.revalidate();
@@ -984,15 +1008,11 @@ public class Recipe implements Info{
                             t.convertToSeconds("minutes", t.convertToMinutes("minutes", time)));
                 }
 
-//                Countdown countdown = CountdownFactory.countdown(
-//                        t.convertToSeconds("minutes", t.convertToMinutes("minutes", time)));
 
                 // Προσθήκη ειδοποίησης όταν τελειώσει η αντίστροφη μέτρηση
                 countdown.addNotifier(new Notifier() {
                     @Override
                     public void finished(Countdown c) {
-//                        System.out.println("Η αντίστροφη μέτρηση " + c.getName() + " ολοκληρώθηκε!");
-//                        SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
@@ -1028,7 +1048,6 @@ public class Recipe implements Info{
                     }
 
                     countdown.stop();
-//                    SwingUtilities.invokeLater(() -> remainingTimeLabel.setText("Ο χρόνος ολοκληρώθηκε!"));
 
                 }).start();
 

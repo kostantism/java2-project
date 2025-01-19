@@ -47,21 +47,25 @@ public class ShoppingList implements Info {
 
         mainPanel.setLayout(new BorderLayout()); // Χρήση BorderLayout για ευκολία
         mainPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
+        mainPanel.setBackground(new Color(223, 222, 222, 255));
 
         // Προσθήκη τίτλου στο πάνω μέρος του mainPanel
         JLabel titleLabel = new JLabel("Λίστα αγορών", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(new Color(25, 25, 112));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Δημιουργία ξεχωριστού panel για τα υπόλοιπα στοιχεία
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        listPanel.setBackground(new Color(255, 250, 240));
+        listPanel.setForeground(new Color(0, 0, 0));
 
         JLabel label;
 
         // Προσθήκη υλικών στη λίστα
-        label = new JLabel("Υλικά προς αγορά:", SwingConstants.LEFT);
+        label = new JLabel("Υλικά για αγορά:", SwingConstants.LEFT);
         label.setFont(new Font("Arial", Font.BOLD, 16));
         listPanel.add(label);
 
@@ -74,6 +78,8 @@ public class ShoppingList implements Info {
         JScrollPane scrollPane = new JScrollPane(listPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBackground(new Color(240, 248, 255)); // Απαλό μπλε για το φόντο του JScrollPane 240, 248, 255
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(25, 25, 112), 1));
 
         // Προσθήκη του scrollPane στο κεντρικό μέρος του mainPanel
         mainPanel.add(scrollPane, BorderLayout.CENTER);
