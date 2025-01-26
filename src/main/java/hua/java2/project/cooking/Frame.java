@@ -32,29 +32,29 @@ public class Frame extends JFrame {
 
         titleLabel = new JLabel("Λίστα Συνταγών", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        titleLabel.setForeground(new Color(25, 25, 112)); // Σκούρο μπλε χρώμα
+        titleLabel.setForeground(new Color(25, 25, 112));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(titleLabel);
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));  // Απόσταση 20px μεταξύ των δύο labels
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         messageLabel = new JLabel("Επιλέξτε μια συνταγή για να την δείτε, να παράξετε λίστα αγορών ή να την εκτελέσετε", SwingConstants.CENTER);
         messageLabel.setFont(new Font("Arial", Font.ITALIC, 12));
-        messageLabel.setForeground(new Color(0, 0, 0)); // Γκρι χρώμα
-        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Στοίχιση στο κέντρο
+        messageLabel.setForeground(new Color(0, 0, 0));
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(messageLabel);
 
         list = new JList<>();
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setFont(new Font("Arial", Font.PLAIN, 16));
-        list.setBackground(new Color(255, 250, 240)); // Απαλό μπεζ χρώμα
-        list.setForeground(new Color(0, 0, 0)); // Μαύρο για το κείμενο
-        list.setSelectionBackground(new Color(173, 216, 230)); // Ανοιχτό μπλε για επιλεγμένα στοιχεία 173, 216, 230
-        list.setSelectionForeground(new Color(0, 0, 0)); // Μαύρο για το κείμενο της επιλογής
+        list.setBackground(new Color(255, 250, 240));
+        list.setForeground(new Color(0, 0, 0));
+        list.setSelectionBackground(new Color(173, 216, 230));
+        list.setSelectionForeground(new Color(0, 0, 0));
 
         JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setBackground(new Color(240, 248, 255)); // Απαλό μπλε για το φόντο του JScrollPane 240, 248, 255
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(25, 25, 112), 1)); // Μπλε περίγραμμα
+        scrollPane.setBackground(new Color(240, 248, 255));
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(25, 25, 112), 1));
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         this.add(mainPanel);
@@ -100,11 +100,11 @@ public class Frame extends JFrame {
         // Δημιουργία JButton
         JButton executeRecipeButton = new JButton("Παραγωγή Λίστας Αγορών");
         executeRecipeButton.setFont(new Font("Arial", Font.BOLD, 14));
-        executeRecipeButton.setBackground(new Color(60, 179, 113)); // Πράσινο κουμπί
-        executeRecipeButton.setForeground(Color.WHITE); // Λευκό κείμενο
-        executeRecipeButton.setFocusPainted(false); // Αφαίρεση περιγράμματος εστίασης
+        executeRecipeButton.setBackground(new Color(60, 179, 113));
+        executeRecipeButton.setForeground(Color.WHITE);
+        executeRecipeButton.setFocusPainted(false);
         executeRecipeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        executeRecipeButton.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15)); // Μαξιλαράκι γύρω από το κουμπί
+        executeRecipeButton.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         mainPanel.add(executeRecipeButton);
 
         executeRecipeButton.addActionListener(e -> {
@@ -139,7 +139,7 @@ public class Frame extends JFrame {
 
         titleLabel = new JLabel("Επιλογές Συνταγής: " + selectedRecipe, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        titleLabel.setForeground(new Color(25, 25, 112)); // Σκούρο μπλε χρώμα
+        titleLabel.setForeground(new Color(25, 25, 112));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(titleLabel);
 
@@ -148,10 +148,10 @@ public class Frame extends JFrame {
         list = new JList<>();
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setFont(new Font("Arial", Font.PLAIN, 16));
-        list.setBackground(new Color(255, 250, 240)); // Απαλό μπεζ χρώμα
-        list.setForeground(new Color(0, 0, 0)); // Μαύρο για το κείμενο
-        list.setSelectionBackground(new Color(173, 216, 230)); // Ανοιχτό μπλε για επιλεγμένα στοιχεία 173, 216, 230
-        list.setSelectionForeground(new Color(0, 0, 0)); // Μαύρο για το κείμενο της επιλογής
+        list.setBackground(new Color(255, 250, 240));
+        list.setForeground(new Color(0, 0, 0));
+        list.setSelectionBackground(new Color(173, 216, 230));
+        list.setSelectionForeground(new Color(0, 0, 0));
 
         DefaultListModel<String> model = new DefaultListModel<>();
         model.addElement("Εμφάνιση Συνταγής");
@@ -196,12 +196,12 @@ public class Frame extends JFrame {
         JDialog dialog = new JDialog(frame, "Καταχώρηση Συνταγών", true);
         dialog.setSize(540, 160);
         dialog.setLayout(new BoxLayout(dialog.getContentPane(), BoxLayout.Y_AXIS));
-        dialog.getContentPane().setBackground(new Color(240, 248, 255)); // Απαλό μπλε φόντο
+        dialog.getContentPane().setBackground(new Color(240, 248, 255));
 
         // Δημιουργία μηνύματος
         JLabel messageLabel = new JLabel("Καταχωρήστε τις συνταγές που θέλετε:");
         messageLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        messageLabel.setForeground(new Color(25, 25, 112)); // Σκούρο μπλε
+        messageLabel.setForeground(new Color(25, 25, 112));
         messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         dialog.add(messageLabel);
 
@@ -224,34 +224,34 @@ public class Frame extends JFrame {
         // Δημιουργία JPanel για κουμπιά
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        buttonPanel.setBackground(new Color(240, 248, 255)); // Απαλό μπλε φόντο
+        buttonPanel.setBackground(new Color(240, 248, 255));
 
         // Δημιουργία JButton για καταχώρηση συνταγής
         JButton submitButton = new JButton("Καταχώρηση Συνταγής");
         submitButton.setFont(new Font("Arial", Font.BOLD, 14));
-        submitButton.setBackground(new Color(60, 179, 113)); // Πράσινο κουμπί
-        submitButton.setForeground(Color.WHITE); // Λευκό κείμενο
+        submitButton.setBackground(new Color(60, 179, 113));
+        submitButton.setForeground(Color.WHITE);
         submitButton.setFocusPainted(false);
 
         // Δημιουργία JButton για νέα επιλογή συνταγής
         JButton nextRecipeButton = new JButton("Επιλογή Νέας Συνταγής");
         nextRecipeButton.setFont(new Font("Arial", Font.BOLD, 14));
-        nextRecipeButton.setBackground(new Color(30, 144, 255)); // Μπλε κουμπί
-        nextRecipeButton.setForeground(Color.WHITE); // Λευκό κείμενο
+        nextRecipeButton.setBackground(new Color(30, 144, 255));
+        nextRecipeButton.setForeground(Color.WHITE);
         nextRecipeButton.setFocusPainted(false);
 
         // Δημιουργία JButton για τέλος
         JButton stopButton = new JButton("Τέλος");
         stopButton.setFont(new Font("Arial", Font.BOLD, 14));
-        stopButton.setBackground(new Color(255, 69, 0)); // Κόκκινο κουμπί
-        stopButton.setForeground(Color.WHITE); // Λευκό κείμενο
+        stopButton.setBackground(new Color(255, 69, 0));
+        stopButton.setForeground(Color.WHITE);
         stopButton.setFocusPainted(false);
 
         // Προσθήκη κουμπιών στο JPanel
         buttonPanel.add(submitButton);
-        buttonPanel.add(Box.createRigidArea(new Dimension(10, 0))); // Απόσταση ανάμεσα στα κουμπιά
+        buttonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         buttonPanel.add(nextRecipeButton);
-        buttonPanel.add(Box.createRigidArea(new Dimension(10, 0))); // Απόσταση ανάμεσα στα κουμπιά
+        buttonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         buttonPanel.add(stopButton);
 
         // Προσθήκη του buttonPanel στο dialog

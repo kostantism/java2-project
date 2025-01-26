@@ -530,7 +530,6 @@ public class Recipe implements Info{
 
         readRecipe(selectedRecipe);
 
-//        printInfo(numOfPeople);
         printInfo(numOfPeople, frame, mainPanel);
     }
 
@@ -1077,7 +1076,6 @@ public class Recipe implements Info{
             counter++;
         }
 
-        // Ενημέρωση του mainPanel
         mainPanel.revalidate();
         mainPanel.repaint();
     }
